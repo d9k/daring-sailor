@@ -4,7 +4,7 @@
 
 ## Description
 
-Game about traveling bet
+Game about sailor merchant.
 
 ## #similar too
 
