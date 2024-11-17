@@ -6,7 +6,7 @@
 
 Game about sailor merchant.
 
-## #similar too
+## #similar to:
 
 - Faster Than Light: events
 - Legend of Zelda: Minish Cap, Ragnarok Online: graphics look
@@ -37,7 +37,13 @@ Game about sailor merchant.
 - [ ] temples
 	- [ ] blessing: missing word to Bible verse / Bible quiz
 - [ ] collectables
-- [ ] possessions: cart, shi
+- [ ] possessions: cart, ship
+- ground tiles:
+	- 0 - deep water
+	- 1 - water
+	- 2 - sand
+	- 3 - swamp
+	- 4 - grass
 	- 5 - forest
 	- 6 - wood
 	- 7 - road/bridge (speed bonus)
