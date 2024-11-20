@@ -1,6 +1,6 @@
 # Daring sailor
 
-- Project stage: planning
+- Project stage: planning, [following GBA tutorials](https://github.com/d9k/d9k-gamedev-examples/tree/main/gba/cpp-butano)
 
 ## See also
 
@@ -39,10 +39,22 @@ Game about sailor merchant.
 	- enemies
 		- health bars
 		- different abilities
-- [ ] temples
-	- [ ] blessing: missing word to Bible verse / Bible quiz
 - [ ] collectables
 - [ ] possessions: cart, ship
+
+## Map
+
+- size
+	- `128*128*4/8/1024=8 kb` map
+	- `x2` side map (`256` cells) => `32kb` map
+	- 8x8 tiles per map cell
+	- 16px tile
+	- GBA screen 160x128 = 10x8 tiles
+	- 256x8=2048 tiles map side
+	- move speed: 2 tiles/s
+	- `2048/2=1024` seconds
+	- `1024` seconds `/ 60 = 17` minutes from side to side
+
 - ground tiles:
 	- 0 - deep water
 	- 1 - water
@@ -54,6 +66,7 @@ Game about sailor merchant.
 	- 7 - road/bridge (speed bonus)
 	- 8 - hill
 	- 9 - rocks
+	- 16 => 2^4 => 4 bits
 
 - buildings
 	- port
@@ -67,6 +80,33 @@ Game about sailor merchant.
 	- mushrooms, herbals
 	- rare herbals respawn randomly on map on pick up. one rare herbal per land type
 
+- [ ] temples
+	- [ ] blessing: missing word to Bible verse / Bible quiz
+
+### Map generation
+
+- (not stored, generated from random seed to save memory)
+
+- +-2 tiles shift on cells vertices
+- +-2 cell borders tiles shift
+
+- random objects are from seed) trees, decorations)
+
+- Also store random basis:
+
+- horizontal: `[0..255] 1..255` random numbers (no zero)
+- vertical: `256 1..255` random numbers
+- random seed basis: `0..555000`?
+
+- `random_seed_for_cell(x,y) = (random_seed_basis + random_seed_for_cell_addition(x, y) % max_seed`
+
+- `random_seed_for_cell_addition(x, y) = random_seed_horizontal_multiplier[x] * random_seed_vertical_multiplier[y]`
+
+- random seed for `[2, 1]` vertex: same as random seed for `[2, 1] `cell (as for cell at right and below of this vertex)
+
+- `random seed for (x, y, x2, y2) border = (random_seed_basis + random_seed_vertical_multiplier[y] * random_seed_horizontal_multiplier[x]) % max_seed`
+
+- road: drawn on 4-5 columns 4-5 rows of cell always (?)
 
 ## Random number generator
 
