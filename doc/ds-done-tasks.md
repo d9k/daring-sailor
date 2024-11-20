@@ -1,5 +1,10 @@
 # Daring sailor: tasks: done
 
+## See also
+
+- [tasks](./ds-tasks.md)
+- [README](../README.md)
+
 ## :white_check_mark: Demo: pixel edit
 
 - (Σ) [sprite-edit-pixels](https://github.com/d9k/d9k-gamedev-examples/tree/main/gba/cpp-butano/sprite-edit-pixels)

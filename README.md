@@ -2,6 +2,11 @@
 
 - Project stage: planning
 
+## See also
+
+- [tasks](./doc/ds-tasks.md)
+- [done tasks](./doc/ds-done-tasks.md)
+
 ## Description
 
 Game about sailor merchant.
