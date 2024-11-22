@@ -5,6 +5,11 @@
 - [done tasks](./ds-done-tasks.md)
 - [README](../README.md)
 
+## Save game
+
+- (and generated map)
+- [ ] [dwight/bson-cxx: C++ BSON Library](https://github.com/dwight/bson-cxx)
+
 ## Generate map
 
 - vector
@@ -12,6 +17,19 @@
 		- `erase(const_iterator position)`
 			- _Erases an element_
 
+- c++ max integer
+	- [Fundamental types - cppreference.com](https://en.cppreference.com/w/cpp/language/types)
+	- 16 bit: `32767`
+	- 32 bit: `2'147'483'647`
+	- :open_file_folder: `butano/hw/3rd_party/maxmod/include/mm_types.h`
+		- `typedef unsigned int	mm_word;	// 32 bits`
+		- `typedef unsigned short	mm_hword;	// 16 bits`
+		- `typedef unsigned char	mm_byte;	// 8 bits`
+
+- memory
+	- :open_file_folder: `games/butano-fighter/src/bf_stats.cpp`
+	- [Frequently asked questions (FAQ) | Butano Docs](https://gvaliente.github.io/butano/faq.html)
+		- `BN_DATA_EWRAM`
 
 ## :black_square_button: Fast pseudo-random number generator
 
@@ -25,6 +43,28 @@
 	- [Examples | Butano Docs](https://gvaliente.github.io/butano/examples.html)
 		- Core example: CPU usage
 		- Timers example: Ticks
+
+- forward declare array in header file
+	- :speech_balloon: [c++ - Is it possible to forward declare a static array | SO](https://stackoverflow.com/questions/936446/is-it-possible-to-forward-declare-a-static-array)
+
+- pass array by reference
+	- :speech_balloon: [Passing an array of structs by reference in C++ | SO](https://stackoverflow.com/questions/8798448/passing-an-array-of-structs-by-reference-in-c)
+		- It's actually impossible to pass an array by value, unless it is a sub-object of another object.
+		- Arrays are represented and passed as pointers, so you are not copying anything here. In contrast, if you were passing a _single_ `struct`, it would be passed by value.
+			- `void passByRef (GoldenHelmet & ofMambrino) {`
+			- `GoldenHelmet h; passByVal(h);`
+	- [Are array members deeply copied? - GeeksforGeeks](https://www.geeksforgeeks.org/are-array-members-deeply-copied/)
+		- the array members are not shallow copied, compiler automatically performs [Deep Copy](http://en.wikipedia.org/wiki/Object_copy#Deep_copy) for array members.
+
+- `*`, `&` differences
+	- :speech_balloon: [C++ functions: ampersand vs asterisk | SO](https://stackoverflow.com/questions/670101/c-functions-ampersand-vs-asterisk)
+		- pointers (ie. the `*`) should be used where the passing `NULL` is meaningful.
+		- when passing by reference, you can't change the reference to refer to another value. Once the reference is set, it can't be changed.
+
+- :speech_balloon: [c++ - Expression must be Modifiable lvalue (char array) | SO](https://stackoverflow.com/questions/37016819/expression-must-be-modifiable-lvalue-char-array)
+
+
+- :speech_balloon: [c++ - Why can't I make a vector of references? | SO](https://stackoverflow.com/questions/922360/why-cant-i-make-a-vector-of-references)
 
 ### :dart: PRN generator plan
 
