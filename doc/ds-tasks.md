@@ -9,6 +9,15 @@ t# Daring Sailor: tasks
 
 - (and generated map)
 
+- I don't like the rigidness of plain C `struct`. You add one field and deserialization of existing savegame file is broken.
+
+- :speaking_head_in_silhouette: I want to store not `{ value1, value2, value3 }` but `{ key1: value1, key2: value2, key3: value3  }` (types of values can be arbitrary, they must be handled manually on deserialization) / [d9k](https://discord.com/channels/768759024270704641/831589248239009832/1309704497001529464)
+
+- [easy Serialization library ? : r/cpp](https://www.reddit.com/r/cpp/comments/p9ftmk/easy_serialization_library/)
+
+-  [schemaless-benchmarks](https://github.com/ludocode/schemaless-benchmarks?tab=readme-ov-file) by [ludocode](https://github.com/ludocode)
+	- _Benchmarks for Schemaless Data Serialization Libraries_
+
 ### Serialize c++ structures
 
 - [c-plus-plus-serializer](https://github.com/goblinhack/c-plus-plus-serializer?tab=readme-ov-file#user-defined-class-serialization) by [goblinhack](https://github.com/goblinhack)
@@ -17,6 +26,7 @@ t# Daring Sailor: tasks
 	- [ ] Also  game version will be saved to `strings.version`  to apply migrations to savegame data.
 	- [ ] Also `#define`s can be used to balance code readability, savegame binary readability and savegame size, for example `#define INTS_KEY_HEALTH 'h'`
 - [palimpsest](https://github.com/stephane-caron/palimpsest) by [stephane-caron](https://github.com/stephane-caron)
+	- Serialize to and deserialize from [MessagePack](https://msgpack.org/)
 	- _Fast serializable C++ dictionaries_
 - [Zmeya](https://github.com/SergeyMakeev/Zmeya) by [SergeyMakeev](https://github.com/SergeyMakeev)
 	- _Zmeya is a header-only C++11 binary serialization library designed for games and performance-critical applications_
@@ -37,6 +47,9 @@ t# Daring Sailor: tasks
 		- _Lightweight, suitable for embedded_
 
 - [CBOR](https://cbor.io/) - _Concise Binary Object Representation_
+	- :speech_balloon: [c++ - Converting `vector<char>` that contains cbor data to const char \* | SO](https://stackoverflow.com/questions/63027107/converting-vectorchar-that-contains-cbor-data-to-const-char)
+	- :newspaper: [SurrealDB | Understanding CBOR](https://surrealdb.com/blog/understanding-cbor)
+	- :scroll: [Implementations | CBOR](https://cbor.io/impls.html)
 	- No Schema needed
 	- _CBOR was originally part of the MsgPack project, by the way, before its designer forked it and renamed it after himself_
 	- :newspaper: [Understanding CBOR Encoded Data | dev.to](https://dev.to/mnelsonwhite/deserialising-cbor-encoded-data-in-net-5cgo)
@@ -61,15 +74,86 @@ t# Daring Sailor: tasks
 			- _Resistance is voltage divided by current._
 			- :symbols: `Cbore& value(const uint8_t* unit, std::size_t length);`
 			- :speaking_head_in_silhouette: [How to get keys of map? | issue #8 | cborg](https://github.com/PelionIoT/cborg/issues/8)
-	- [platform/system/libcppbor - Git at Google](https://android.googlesource.com/platform/system/libcppbor/), 2024
+	- [platform/system/libcppbor - Git at Google](https://android.googlesource.com/platform/system/libcppbor/)
+		- :collision: still updated at 2024
+		- :alembic: awesome test coverage
 		- [old libcppbor](https://github.com/google/libcppbor) by [google](https://github.com/google)
-
 	- [cn-cbor](https://github.com/cabo/cn-cbor) by [cabo](https://github.com/cabo)
 		- _A constrained node implementation of CBOR in C_
 	- [QCBOR](https://github.com/laurencelundblade/QCBOR) by [laurencelundblade](https://github.com/laurencelundblade)
 		- _Comprehensive, powerful, commercial-quality CBOR encoder/ decoder that is still suited for small devices._
+	- [libcbor](https://github.com/PJK/libcbor) by [PJK](https://github.com/PJK)
+		- _CBOR protocol implementation for #C_
+		- byte strings
+			- [Type 2 – Byte strings — libcbor 0.8.0 documentation](https://libcbor.readthedocs.io/en/v0.8.0/api/type_2.html)
+	- [isode / cbor-lite — Bitbucket](https://bitbucket.org/isode/cbor-lite/src/master/)
+		- 2022
+	- [-] YAML
+		- :sparkles: very human-readable
+		- :microbe: to verbose for small memory
+		- [Binary Data Language-Independent Type for YAML™ Version 1.1](https://yaml.org/type/binary.html)
+			- just BASE64
+				- [yEnc - Wikipedia](https://en.wikipedia.org/wiki/YEnc)
+					- The yEnc homepage states that "_all major newsreaders have been extended to yEnc support_"
+					- yEnc assumes that binary data mostly can be transmitted through Usenet and email. Therefore, 252 of the 256 possible bytes are passed through unencoded as a single byte. Only NUL, LF, CR, and = are escaped.
+	- JSON
+		- :sparkles: very widespread
+		- :microbe: large size overhead
+		- :sparkles: human-readable
+		- encode binary string
+			- :speech_balloon: [Binary Data in JSON String. Something better than Base64 | SO](https://stackoverflow.com/questions/1443158/binary-data-in-json-string-something-better-than-base64)
+				- For download, you might be surprised how well base64 compresses under gzip (http://davidbcalhoun.com/2011/when-to-base64-encode-images-and-when-not-to)
+				- [ ] multipart/form-data
+				- Base91, Base93, Base122
+				- Intel HEX
+					- readability
+			- [yEnc - Wikipedia](https://en.m.wikipedia.org/wiki/YEnc)
+				- yEnc's overhead is often (if each byte value appears approximately with the same frequency on average) as little as 1–2%, (https://en.wikipedia.org/wiki/YEnc#cite_note-1) compared to 33–40% overhead for 6-bit encoding methods like uuencode (https://en.wikipedia.org/wiki/Uuencode) and Base64 (https://en.wikipedia.org/wiki/Base64).
+				- [python3-yenc](https://github.com/oe-mirrors/python3-yenc) by [oe-mirrors](https://github.com/oe-mirrors)
+				- [simple-yenc](https://github.com/eshaz/simple-yenc) by [eshaz](https://github.com/eshaz)
+					- _Minimalist JavaScript binary string encoder / decoder with 1-2% overhead, compared to 33%-40% overhead for 6-bit encoding methods like Base64._
+			- [smile-format-specification](https://github.com/FasterXML/smile-format-specification) by [FasterXML](https://github.com/FasterXML)
+				- _is a binary data format that defines a binary equivalent of standard_
 
-- [isode / cbor-lite — Bitbucket](https://bitbucket.org/isode/cbor-lite/src/master/)
+- [bitsery](https://github.com/fraillt/bitsery) by [fraillt](https://github.com/fraillt)
+	- _Your binary serialization library_
+	- x3 faster then messagepack
+	- [Motivation](https://github.com/fraillt/bitsery/blob/master/doc/design/README.md)
+		- I wanted serializer that is easy to use as [cereal](http://uscilab.github.io/cereal/), is cross-platform compatible, and has support for forward/backward compatibility like [flatbuffers](https://google.github.io/flatbuffers/), is safe to use with untrusted (malicious) data, and most importantly is fast and has a small binary footprint.
+		- Furthermore, I wanted full serialization control and the ability to work on a bit level, so I can further reduce data size.
+
+- [binn](https://github.com/liteserver/binn) by [liteserver](https://github.com/liteserver), #C
+	- _Binary Serialization_
+	- bytes array?
+		- list of `BINN_INT8`
+		- binn_list_int8
+	- simple
+
+### Database/key-value store?
+
+- [A Glimpse into the World of Embedded Database Feat. RocksDB | by Kartik Khare | Walmart Global Tech Blog | Medium](https://medium.com/walmartglobaltech/https-medium-com-kharekartik-rocksdb-and-embedded-databases-1a0f8e6ea74f)
+- :newspaper: [Picking a Database for Embedded Systems | dev.to](https://dev.to/objectbox/embedded-databases-what-is-an-embedded-database-and-how-to-choose-one-27m8)
+- :speech_balloon: [A Key Value Store for Embedded Devices ? - Any recommendations ? : r/embedded](https://www.reddit.com/r/embedded/comments/jo3wmz/a_key_value_store_for_embedded_devices_any/)
+
+- BerkleyDB
+	- :speech_balloon: [For anyone thinking Berkeley DB, because it has transactions and logging, is a g... | Hacker News](https://news.ycombinator.com/item?id=10150394)
+		- Its tools are crap: it can't tell you how big a database is without traversing every single entry, they hold locks while writing to the terminal (meaning you can't pipe them into a pager without freezing the whole DB), and if one of them crashes (due to e.g. a dropped SSH connection) they'll bring down the whole DB due to stale locks.
+		- [Berkeley DB - Wikipedia](https://en.m.wikipedia.org/wiki/Berkeley_DB)
+			- embedded database software library for key/value data
+
+ - SQLite
+
+	- :speech_balloon: [For anyone thinking Berkeley DB, because it has transactions and logging, is a g... | Hacker News](https://news.ycombinator.com/item?id=10150394)
+		- And my sympathy to anyone who tries to run SQLite on this bad boy… combined with SQLite's shoddy track record interpreting any query more complicated than a key-value lookup, it would be a wonder if you're able to get any data in and out intact.
+	- :speech_balloon: [database - Sqlite on an embedded system | SO](https://stackoverflow.com/questions/178264/sqlite-on-an-embedded-system), 2008
+		- _The smallest sqlite3 I came up with was 327 KBytes (for PowerPC), which was sufficient for the system so I stopped trying to make it smaller. This was the full sqlite3 CLI binary, the C APIs alone would have been somewhat smaller. I had set `SQLITE_OMIT_AUTHORIZATION`, `SQLITE_OMIT_EXPLAIN`, `SQLITE_OMIT_PROGRESS_CALLBACK`, and `SQLITE_OMIT_TCL_VARIABLE` to trim the size of the binary, and used `-Os`to get it to that size._
+- [SQLite Library Footprint](https://www.sqlite.org/footprint.html)
+
+- [sophia](https://github.com/pmwkaa/sophia) by [pmwkaa](https://github.com/pmwkaa)
+	- _Modern transactional key-value/row storage library._
+
+- [ostore](https://github.com/woodsmc/ostore) by [woodsmc](https://github.com/woodsmc)
+	- _Simple Object Storage_
 
 ## :black_square_button: Generate map
 
@@ -93,3 +177,7 @@ t# Daring Sailor: tasks
 		- `BN_DATA_EWRAM`
 
 - :newspaper: [Different ways to instantiate an object in C++ with Examples - GeeksforGeeks](https://www.geeksforgeeks.org/different-ways-to-instantiate-an-object-in-c-with-examples/)
+
+- :speech_balloon: [performance - Fastest C++ map? | SO](https://stackoverflow.com/questions/3198112/fastest-c-map)
+
+- :newspaper: [String enum — строковые enum | Хабр](https://habr.com/ru/articles/236403/)
