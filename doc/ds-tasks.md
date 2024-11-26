@@ -13,6 +13,20 @@ t# Daring Sailor: tasks
 
 - :point_right: [[serialize-data-for-embedded]] [(weblink)](https://github.com/d9k/d9k-public-notes/blob/main/pr-data/serialize-data-for-embedded.md)
 
+### Compress savegame
+
+- to fit in 32kb SRAM
+
+- [zlib\_turbo](https://github.com/bitbank2/zlib_turbo) by [bitbank2](https://github.com/bitbank2)
+	- _Optimized zlib inflate (+gzip) library for embedded_
+- [Romhacking.net - Utilities - Nintendo DS/GBA Compressors](https://www.romhacking.net/utilities/826/)
+
+- [JSON Compression: Alternative Binary Formats and Compression Methods | Lucid](https://lucid.co/techblog/2019/12/06/json-compression-alternative-binary-formats-and-compression-methods)
+
+- [BIOS Functions | GBATEK - GBA/NDS Technical Info](https://problemkaputt.de/gbatek.htm#biosfunctions)
+	- `vpk_decompress(src,dest)`
+	- `load_huffman_tree()`
+
 ## :black_square_button: Generate map
 
 - vector
@@ -33,7 +47,6 @@ t# Daring Sailor: tasks
 	- :open_file_folder: `games/butano-fighter/src/bf_stats.cpp`
 	- [Frequently asked questions (FAQ) | Butano Docs](https://gvaliente.github.io/butano/faq.html)
 		- `BN_DATA_EWRAM`
-
 
 ## C++
 
