@@ -46,7 +46,7 @@ Game about sailor merchant.
 
 - size
 	- `128*128*4/8/1024=8 kb` map
-	- `x2` side map (`256` cells) => `32kb` map
+	- `x2` side map (`256` cells) => `x4` size => `32kb` map
 	- 8x8 tiles per map cell
 	- 16px tile
 	- GBA screen 160x128 = 10x8 tiles
