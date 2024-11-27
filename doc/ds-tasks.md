@@ -17,15 +17,44 @@ t# Daring Sailor: tasks
 
 - to fit in 32kb SRAM
 
+- :speech_balloon: [Lightweight (de)compression algorithm for embedded use | SO](https://stackoverflow.com/questions/45900206/lightweight-decompression-algorithm-for-embedded-use)
+
+- :newspaper: :thumbsup: [JSON Compression: Alternative Binary Formats and Compression Methods | Lucid](https://lucid.co/techblog/2019/12/06/json-compression-alternative-binary-formats-and-compression-methods)
+
 - [zlib\_turbo](https://github.com/bitbank2/zlib_turbo) by [bitbank2](https://github.com/bitbank2)
 	- _Optimized zlib inflate (+gzip) library for embedded_
 - [Romhacking.net - Utilities - Nintendo DS/GBA Compressors](https://www.romhacking.net/utilities/826/)
 
-- [JSON Compression: Alternative Binary Formats and Compression Methods | Lucid](https://lucid.co/techblog/2019/12/06/json-compression-alternative-binary-formats-and-compression-methods)
+- [ ] [heatshrink](https://github.com/atomicobject/heatshrink) by [atomicobject](https://github.com/atomicobject)
+	- _data compression library for embedded/real-time systems_
+
+- [ ] [gzip-hpp](https://github.com/mapbox/gzip-hpp) by [mapbox](https://github.com/mapbox)
+	- _Gzip header-only C++ library_
+
+- [elz4](https://github.com/P-i-N/elz4) by [P-i-N](https://github.com/P-i-N)
+	- _Embeddable LZ4 decompressor_
+
+- [ECL](https://github.com/Nonoum/ECL) by [Nonoum](https://github.com/Nonoum)
+	- _Embedded Compression Library for low-memory systems_
+
+- [-] [quicklz](https://github.com/RT-Thread-packages/quicklz) by [RT-Thread-packages](https://github.com/RT-Thread-packages)
+	- _the world's fastest compression library_
+	- QuickLZ is known as the fastest compression library in the world, with a speed of 308 Mbyte/s per core, simple to use and easy to integrate.
+	- :microbe: Need much memory:
+		- _The memory space required for quicklz library compression is relatively large, and the device memory space is insufficient Solution: Modify the size of `QLZ_HASH_VALUES` under the current level in the `quicklz.h` file_
 
 - [BIOS Functions | GBATEK - GBA/NDS Technical Info](https://problemkaputt.de/gbatek.htm#biosfunctions)
 	- `vpk_decompress(src,dest)`
 	- `load_huffman_tree()`
+	- :open_file_folder: `butano/hw/3rd_party/libugba/include/ugba/bios.h`
+		- `SWI_HuffUnComp()`
+			- Decompresses Huffman-encoded data from the source and writes the result to the destination using 32-bit writes. VRAM can be used as destination.
+
+- [JSONC](https://github.com/tcorral/JSONC) by [tcorral](https://github.com/tcorral)
+	- _JSON compressor and decompressor_
+	- Compress a JSON object as a Gzipped string
+	- Optional compress with a map
+	- not connected to JSONC format used by VS Code configs
 
 ## :black_square_button: Generate map
 
