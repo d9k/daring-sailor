@@ -56,6 +56,10 @@ t# Daring Sailor: tasks
 	- Optional compress with a map
 	- not connected to JSONC format used by VS Code configs
 
+- [Huffman coding - Wikipedia](https://en.wikipedia.org/wiki/Huffman_coding)
+	- :speech_balloon: [compression - Why to combine Huffman and lz77? | SO](https://stackoverflow.com/questions/55547113/why-to-combine-huffman-and-lz77)
+		- :speech_balloon: [asp.net - What is the advantage of GZIP vs DEFLATE compression? | SO](https://stackoverflow.com/questions/7243705/what-is-the-advantage-of-gzip-vs-deflate-compression)
+
 ## :black_square_button: Generate map
 
 - vector
