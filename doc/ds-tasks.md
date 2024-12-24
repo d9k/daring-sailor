@@ -5,14 +5,21 @@ t# Daring Sailor: tasks
 - [done tasks](./ds-done-tasks.md)
 - [README](../README.md)
 
-
 ## :black_square_button: Demo with compression
 
 - [ ] huffman alone may be enough for JSON compression
 
 ### EWRAM
 
-- [ ] :speaking_head_in_silhouette: [Documentation: EWRAM macro | issue #79 | butano](https://github.com/GValiente/butano/issues/79), 2024.12.16
+- [x] :speaking_head_in_silhouette: [Documentation: EWRAM macro | issue #79 | butano](https://github.com/GValiente/butano/issues/79), 2024.12.16
+	 - heap `int *numbers = new int[c]`
+		 - _Yes, it should be stored in EWRAM. You can log the numbers pointer and check if the address is in the on-board work RAM (EWRAM) range:[GBA Memory Map | GBATEK](https://problemkaputt.de/gbatek.htm#gbamemorymap_) / [GValiente](https://github.com/GValiente/butano/issues/79#issuecomment-2545174773)
+	- what about `BN_EWRAM_BSS_SECTION`?
+		- [.bss - Wikipedia](https://en.wikipedia.org/wiki/.bss)
+	- :speech_balloon: [How to initialize an empty integer array in C++ - Quora](https://www.quora.com/How-do-I-initialize-an-empty-integer-array-in-C)
+	- :newspaper: [How to dynamically allocate, initialize, and delete arrays in C++](https://www.educative.io/answers/how-to-dynamically-allocate-initialize-and-delete-arrays-in-cpp)
+		 - `delete[] arr`
+	 - :speech_balloon: [c++ - Deleting a char array | SO](https://stackoverflow.com/questions/763520/deleting-a-char-array)
 
 - EWRAM_DATA
 - EWRAM_BSS
@@ -47,7 +54,36 @@ t# Daring Sailor: tasks
 
 - :speech_balloon: [c++ how to free memory \*char? | SO](https://stackoverflow.com/questions/14927243/c-how-to-free-memory-char)
 
-### SAX-style parser: parsing to class
+## Demo: SAX-style parser: parsing to class
+
+- `ParsersStack`
+	- `parsers`
+	- `add`
+	- `pop`
+	- `parseTocken()`
+		- :beginner: [Token-by-Token Parsing | RapidJSON: SAX](https://rapidjson.org/md_doc_sax.html)
+	- `std::vector`
+	- [-] `std::list`
+		- :rotating_light: :point_right: [[gd-garbage#^d9k-gba-std-list-fail-2024-12-23|garbage: GBA std list fail]]
+	- base class methods calls base class fields
+		- :rotating_light: `member function declared with 'override' does not override a base class member`
+
+- [ ] `char*` from `const char*?`
+	- [ ] :speech_balloon: [c++ - How to store a const char\* to a char\*? | SO](https://stackoverflow.com/questions/36789380/how-to-store-a-const-char-to-a-char)
+
+- [ ] `lastParseEvent:`
+	- :beginner: [C++ | Перечисления](https://metanit.com/cpp/tutorial/5.9.php)
+	- `PARSE_EVENT_WAIT_NEXT_TOKEN = 0`
+	- `PARSE_EVENT_IMMERSE_TO_SUBPARSER = 1`
+	- `PARSE_EVENT_PARSE_FINISHED = 2`
+
+- `currentFieldName: string`
+- `currentFieldSubparser: Parser`
+- `result: any`
+
+- `parserFinished`
+
+- `onSubparserFinished(subparser)`
 
 - `parsingHandlersStack std::list`
 
@@ -68,12 +104,6 @@ t# Daring Sailor: tasks
 	- `MyClass* p = new MyClass();` In that case, you have to take care of releasing the memory by doing delete yourself.
 	- _I always prefer to use the stack allocated objects whenever possible as I don't have to be bothered about the memory management._
 	- `MyClass* myclassptr = &myclass;`
-
-#### Using std:string
-
-- _Why store it as a `std::string`? It could mess with the heap_ / [GValiente](https://discord.com/channels/768759024270704641/771045950709694474/1293508271080214598)
-
-- _You can use most of the std lib. like std::string, std::vector, etc. it's slower than using something like etl, but it's there / [GValiente](https://discord.com/channels/768759024270704641/829850171151876127/1174087767689539600)_
 
 
 ### :white_check_mark:  include resources file
@@ -106,6 +136,7 @@ t# Daring Sailor: tasks
 ### :black_square_button: Choosing serialization library
 
 - :point_right: [[serialize-data-for-embedded]] [(weblink)](https://github.com/d9k/d9k-public-notes/blob/main/pr-data/serialize-data-for-embedded.md)
+- :beginner: [RapidJSON: SAX](https://rapidjson.org/md_doc_sax.html)
 - JSON5
 	- no SAX JSON5 library?
 
@@ -179,15 +210,92 @@ t# Daring Sailor: tasks
 	- [Frequently asked questions (FAQ) | Butano Docs](https://gvaliente.github.io/butano/faq.html)
 		- `BN_DATA_EWRAM`
 
-## C++
+## #Cpp
+
+- C++ `override` / `virtual`
+	- [Virtual Function in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/virtual-function-cpp/)
+	- :speech_balloon: [Why doesn't C++ have virtual variables? | SO](https://stackoverflow.com/questions/3248255/why-doesnt-c-have-virtual-variables)
+	- [Virtual inheritance - Wikipedia](https://en.wikipedia.org/wiki/Virtual_inheritance)
+
+- C++ abstract
+	- [Abstract class - cppreference.com](https://en.cppreference.com/w/cpp/language/abstract_class)
+
+- :speech_balloon: [c++ - STL List to hold structure pointers | SO](https://stackoverflow.com/questions/1085489/stl-list-to-hold-structure-pointers)
+
+- :speech_balloon: [c - Why structs cannot be assigned directly? | SO](https://stackoverflow.com/questions/12189480/why-structs-cannot-be-assigned-directly)
 
 - :newspaper: [Different ways to instantiate an object in C++ with Examples - GeeksforGeeks](https://www.geeksforgeeks.org/different-ways-to-instantiate-an-object-in-c-with-examples/)
 
 - :speech_balloon: [performance - Fastest C++ map? | SO](https://stackoverflow.com/questions/3198112/fastest-c-map)
 
-- :newspaper: [String enum — строковые enum | Хабр](https://habr.com/ru/articles/236403/)
-
 - [Enum-Klassen in C++ und ihr Vorteil gegenüber Enum-Datentypen - GeeksforGeeks](https://www.geeksforgeeks.org/enum-classes-in-c-and-their-advantage-over-enum-datatype/)
 
 - strings concatenation?
 	- `const char welcome[] = "print('-= " LUA_PROGNAME " " LUA_PROGVER " =-')";`
+
+
+### #Butano Using `bn::string`
+
+- :speaking_head_in_silhouette: How to compare `bn::string`?
+	- `bn::string` is a `std::string` copycat. Comparing works the same / [GValiente](https://discord.com/channels/768759024270704641/831589248239009832/1320842067424972940)
+
+### C++ using `* char`
+
+[c - How to Compare 2 Character Arrays - Stack Overflow](https://stackoverflow.com/questions/40605075/how-to-compare-2-character-arrays)
+
+### C++ std::string_view
+
+- :newspaper: [C++ | Тип std:string\_view](https://metanit.com/cpp/tutorial/12.10.php)
+
+- :newspaper: [C++17 — std::string\_view и никакого копирования / Хабр](https://habr.com/ru/companies/otus/articles/715608/)
+
+### C++ Using std:string
+
+- :beginner: [std::to\_string - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/to_string)
+
+- :beginner: [cplusplus.com/reference/sstream/ostringstream/](https://cplusplus.com/reference/sstream/ostringstream/)
+
+- :newspaper: [C++17 — std::string\_view и никакого копирования | Хабр](https://habr.com/ru/companies/otus/articles/715608/)
+
+- :speech_balloon: [How do I convert from stringstream to string in C++? | SO](https://stackoverflow.com/questions/662976/how-do-i-convert-from-stringstream-to-string-in-c)
+	- `ss.str();`
+
+- :speech_balloon: [c++ - How to convert a std::string to const char\* or char\* | SO](https://stackoverflow.com/questions/347949/how-to-convert-a-stdstring-to-const-char-or-char?rq=1)
+	- `const char * c = str.c_str();`
+	- `char * c = str.data();`
+
+- :speech_balloon: [c++ - convert a char\* to std::string | SO](https://stackoverflow.com/questions/1195675/convert-a-char-to-stdstring)
+
+- _Why store it as a `std::string`? It could mess with the heap_ / [GValiente](https://discord.com/channels/768759024270704641/771045950709694474/1293508271080214598)
+
+- _You can use most of the std lib. like std::string, std::vector, etc. it's slower than using something like etl, but it's there / [GValiente](https://discord.com/channels/768759024270704641/829850171151876127/1174087767689539600)_
+
+### C++ using enum
+
+- [magic\_enum](https://github.com/Neargye/magic_enum) by [Neargye](https://github.com/Neargye)
+	- _Static reflection for enums (to string, from string, iteration) for modern C++, work with any enum type without any macro or boilerplate code_
+
+- :newspaper: [String enum — строковые enum | Хабр](https://habr.com/ru/articles/236403/)
+
+- :beginner: [C++ | Перечисления](https://metanit.com/cpp/tutorial/5.9.php)
+
+### C++ template class
+
+- :speech_balloon: [c++ - How to avoid specifying arguments for a class template with default template arguments | SO](https://stackoverflow.com/questions/15373823/how-to-avoid-specifying-arguments-for-a-class-template-with-default-template-arg)
+- :speech_balloon: [Inheriting from a template class in c++ | SO](https://stackoverflow.com/questions/8810224/inheriting-from-a-template-class-in-c)
+- :beginner: [Шаблоны классов | Microsoft Learn](https://learn.microsoft.com/ru-ru/cpp/cpp/class-templates?view=msvc-170)
+
+### C++ multiple inheritance
+
+- [Multiple Inheritance in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/multiple-inheritance-in-c/)
+
+### C++ abstract class
+
+### :no_entry_sign: C++ set field by name
+
+- [-] :speech_balloon: [c++ - How can I access a struct property by string name? | SO](https://stackoverflow.com/questions/36506588/how-can-i-access-a-struct-property-by-string-name)
+	- requires macro
+
+### C++ standards
+
+- :newspaper: [C++17 — std::string\_view и никакого копирования / Хабр](https://habr.com/ru/companies/otus/articles/715608/)
