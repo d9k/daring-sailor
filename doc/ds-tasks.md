@@ -67,6 +67,8 @@ t# Daring Sailor: tasks
 		- :rotating_light: :point_right: [[gd-garbage#^d9k-gba-std-list-fail-2024-12-23|garbage: GBA std list fail]]
 	- base class methods calls base class fields
 		- :rotating_light: `member function declared with 'override' does not override a base class member`
+	- :rotating_light: `undefined reference to std::__throw_length_error`
+		- [x] [Arduino Due warning: std::\_\_throw\_length\_error(char const\*) - Mega / Due - Arduino Forum](https://forum.arduino.cc/t/arduino-due-warning-std-__throw_length_error-char-const/308515)
 
 - [ ] `char*` from `const char*?`
 	- [ ] :speech_balloon: [c++ - How to store a const char\* to a char\*? | SO](https://stackoverflow.com/questions/36789380/how-to-store-a-const-char-to-a-char)
@@ -239,15 +241,29 @@ t# Daring Sailor: tasks
 - :speaking_head_in_silhouette: How to compare `bn::string`?
 	- `bn::string` is a `std::string` copycat. Comparing works the same / [GValiente](https://discord.com/channels/768759024270704641/831589248239009832/1320842067424972940)
 
+- :speaking_head_in_silhouette: Why trying to use  `std::string` with "wonderful toolchain" and butano is a mess? / [2024.12.25](https://discord.com/channels/768759024270704641/831589248239009832/1321345763091021845)
+
+- how max size is used?
+
+- :beginner: [bn::string class | Butano Docs](https://gvaliente.github.io/butano/classbn_1_1string.html)
+	- `std::string` like container with a fixed size buffer.
+
+- _Storing a `bn::string` in rom seems a bit wasteful, when you can store a `bn::string_view` [GValiente](https://discord.com/channels/768759024270704641/831589248239009832/1277140156742242376)
+
 ### C++ using `* char`
 
 [c - How to Compare 2 Character Arrays - Stack Overflow](https://stackoverflow.com/questions/40605075/how-to-compare-2-character-arrays)
 
 ### C++ std::string_view
 
+- :speech_balloon: [Why can I mutate a std::string\_view? : r/cpp\_questions](https://www.reddit.com/r/cpp_questions/comments/1aqu722/why_can_i_mutate_a_stdstring_view/?rdt=46916)
+	- _You can pretty much think of `std::string_view` as a `const char*`, except that it is aware of its size and has member functions. Importantly it has constructors form a bunch of "string like" types._ / [IyeOnline](https://www.reddit.com/r/cpp_questions/comments/1aqu722/comment/kqg60wy/)
+
 - :newspaper: [C++ | Тип std:string\_view](https://metanit.com/cpp/tutorial/12.10.php)
 
 - :newspaper: [C++17 — std::string\_view и никакого копирования / Хабр](https://habr.com/ru/companies/otus/articles/715608/)
+
+ - :newspaper: [Three reasons to pass \`std::string\_view\` by value – Arthur O'Dwyer – Stuff mostly about C++](https://quuxplusone.github.io/blog/2021/11/09/pass-string-view-by-value/)
 
 ### C++ Using std:string
 
@@ -265,6 +281,9 @@ t# Daring Sailor: tasks
 	- `char * c = str.data();`
 
 - :speech_balloon: [c++ - convert a char\* to std::string | SO](https://stackoverflow.com/questions/1195675/convert-a-char-to-stdstring)
+
+- :rotating_light: `undefined reference to std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_replace_cold`
+	- :speech_balloon: [Build errors with GCC 13 | issue #3292 | sonic-pi](https://github.com/sonic-pi-net/sonic-pi/issues/3292)
 
 - _Why store it as a `std::string`? It could mess with the heap_ / [GValiente](https://discord.com/channels/768759024270704641/771045950709694474/1293508271080214598)
 
@@ -299,3 +318,48 @@ t# Daring Sailor: tasks
 ### C++ standards
 
 - :newspaper: [C++17 — std::string\_view и никакого копирования / Хабр](https://habr.com/ru/companies/otus/articles/715608/)
+
+### C++ string alternatives
+
+- [panda-lib](https://github.com/CrazyPandaLimited/panda-lib) by [CrazyPandaLimited](https://github.com/CrazyPandaLimited)
+	- _Basic C++ library_
+
+### C++ code analysis
+
+- :newspaper: [“Why doesn’t my code work?” — to anyone learning the art of programming and writing to the Stack Overflow community | by Andrey Karpov | Medium](https://medium.com/@Code_Analysis/why-doesnt-my-code-work-62a8b92956a)
+
+### C++ destructors
+
+- :speech_balloon: [c++ - Destructor for char arrays Error | SO](https://stackoverflow.com/questions/24685133/destructor-for-char-arrays-error)
+	- There is no need to check for `NULL` when issuing a `delete`
+
+- https://stackoverflow.com/questions/36020149/how-to-design-class-that-has-char-pointer-as-class-member-variable
+
+### C++ attributes
+
+- :speech_balloon: [c++ - Атрибут nodiscard - Stack Overflow на русском](https://ru.stackoverflow.com/questions/1251814/%D0%90%D1%82%D1%80%D0%B8%D0%B1%D1%83%D1%82-nodiscard)
+
+### C++ std::any
+
+- :speech_balloon: [c++ - std::any without RTTI, how does it work? | SO](https://stackoverflow.com/questions/51361606/stdany-without-rtti-how-does-it-work)
+	- Basically, `std::any` holds two things:
+		- A pointer to a (dynamically) allocated storage
+			- A pointer to a "storage manager function"
+
+ - :newspaper: [C++ | std::any - comparison with void\* and motivating examples - nextptr](https://www.nextptr.com/tutorial/ta1571648512/stdany-comparison-with-void-and-motivating-examples)
+
+ - :beginner: [std::any\_cast - cppreference.com](https://en.cppreference.com/w/cpp/utility/any/any_cast)
+
+### C++ call super constructor
+
+- :speech_balloon: [c++ - What are the rules for calling the base class constructor? | SO](https://stackoverflow.com/questions/120876/what-are-the-rules-for-calling-the-base-class-constructor)
+
+- :speech_balloon: [c++ - Why is my override method not being called? | SO](https://stackoverflow.com/questions/42149093/why-is-my-override-method-not-being-called)
+	- While you're inside a constructor, the derived class hasn't been constructed yet, so it effectively doesn't exist - constructors are executed base first, derived second. Any member calls you make from the base class constructor will be to the base class members.
+	- If you would call `Show` in derived class from the ctor of the base class, `Child::Show` would use data fields of `Child` but the ctor of the derived class has not been called yet.
+
+- [How can I call overridden function from constructor? - Development / Programming & Scripting - Epic Developer Community Forums](https://forums.unrealengine.com/t/how-can-i-call-overridden-function-from-constructor/287695)
+	- In Unreal Engine there are special init functions, like `OnConstruction` and `PostSpawn`, they are called automatically by the engine on every actors’ construction.
+
+- :speech_balloon: [c++ - Do I need to explicitly call the base virtual destructor? | SO](https://stackoverflow.com/questions/677620/do-i-need-to-explicitly-call-the-base-virtual-destructor)
+	- Destructors are called automatically in the reverse order of construction. (Base classes last). Do not call base class destructors.
