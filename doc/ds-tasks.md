@@ -214,14 +214,6 @@ t# Daring Sailor: tasks
 
 ## #Cpp
 
-- C++ `override` / `virtual`
-	- [Virtual Function in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/virtual-function-cpp/)
-	- :speech_balloon: [Why doesn't C++ have virtual variables? | SO](https://stackoverflow.com/questions/3248255/why-doesnt-c-have-virtual-variables)
-	- [Virtual inheritance - Wikipedia](https://en.wikipedia.org/wiki/Virtual_inheritance)
-
-- C++ abstract
-	- [Abstract class - cppreference.com](https://en.cppreference.com/w/cpp/language/abstract_class)
-
 - :speech_balloon: [c++ - STL List to hold structure pointers | SO](https://stackoverflow.com/questions/1085489/stl-list-to-hold-structure-pointers)
 
 - :speech_balloon: [c - Why structs cannot be assigned directly? | SO](https://stackoverflow.com/questions/12189480/why-structs-cannot-be-assigned-directly)
@@ -235,6 +227,11 @@ t# Daring Sailor: tasks
 - strings concatenation?
 	- `const char welcome[] = "print('-= " LUA_PROGNAME " " LUA_PROGVER " =-')";`
 
+### C++ links
+
+- :point_right: [[cpp-any|any / C++ / d9k-textbook]] [\[url\]](https://github.com/d9k/d9k-textbook/blob/master/cpp/cpp-any.md)
+- :point_right: [[cpp-class|class / C++ / d9k-textbook]] [\[url\]](https://github.com/d9k/d9k-textbook/blob/master/cpp/cpp-class.md)
+- :point_right: [[cpp-string|string / C++ / d9k-textbook]] [\[url\]](https://github.com/d9k/d9k-textbook/blob/master/cpp/cpp-string.md)
 
 ### #Butano Using `bn::string`
 
@@ -250,45 +247,6 @@ t# Daring Sailor: tasks
 
 - _Storing a `bn::string` in rom seems a bit wasteful, when you can store a `bn::string_view` [GValiente](https://discord.com/channels/768759024270704641/831589248239009832/1277140156742242376)
 
-### C++ using `* char`
-
-[c - How to Compare 2 Character Arrays - Stack Overflow](https://stackoverflow.com/questions/40605075/how-to-compare-2-character-arrays)
-
-### C++ std::string_view
-
-- :speech_balloon: [Why can I mutate a std::string\_view? : r/cpp\_questions](https://www.reddit.com/r/cpp_questions/comments/1aqu722/why_can_i_mutate_a_stdstring_view/?rdt=46916)
-	- _You can pretty much think of `std::string_view` as a `const char*`, except that it is aware of its size and has member functions. Importantly it has constructors form a bunch of "string like" types._ / [IyeOnline](https://www.reddit.com/r/cpp_questions/comments/1aqu722/comment/kqg60wy/)
-
-- :newspaper: [C++ | Тип std:string\_view](https://metanit.com/cpp/tutorial/12.10.php)
-
-- :newspaper: [C++17 — std::string\_view и никакого копирования / Хабр](https://habr.com/ru/companies/otus/articles/715608/)
-
- - :newspaper: [Three reasons to pass \`std::string\_view\` by value – Arthur O'Dwyer – Stuff mostly about C++](https://quuxplusone.github.io/blog/2021/11/09/pass-string-view-by-value/)
-
-### C++ Using std:string
-
-- :beginner: [std::to\_string - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/to_string)
-
-- :beginner: [cplusplus.com/reference/sstream/ostringstream/](https://cplusplus.com/reference/sstream/ostringstream/)
-
-- :newspaper: [C++17 — std::string\_view и никакого копирования | Хабр](https://habr.com/ru/companies/otus/articles/715608/)
-
-- :speech_balloon: [How do I convert from stringstream to string in C++? | SO](https://stackoverflow.com/questions/662976/how-do-i-convert-from-stringstream-to-string-in-c)
-	- `ss.str();`
-
-- :speech_balloon: [c++ - How to convert a std::string to const char\* or char\* | SO](https://stackoverflow.com/questions/347949/how-to-convert-a-stdstring-to-const-char-or-char?rq=1)
-	- `const char * c = str.c_str();`
-	- `char * c = str.data();`
-
-- :speech_balloon: [c++ - convert a char\* to std::string | SO](https://stackoverflow.com/questions/1195675/convert-a-char-to-stdstring)
-
-- :rotating_light: `undefined reference to std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_replace_cold`
-	- :speech_balloon: [Build errors with GCC 13 | issue #3292 | sonic-pi](https://github.com/sonic-pi-net/sonic-pi/issues/3292)
-
-- _Why store it as a `std::string`? It could mess with the heap_ / [GValiente](https://discord.com/channels/768759024270704641/771045950709694474/1293508271080214598)
-
-- _You can use most of the std lib. like std::string, std::vector, etc. it's slower than using something like etl, but it's there / [GValiente](https://discord.com/channels/768759024270704641/829850171151876127/1174087767689539600)_
-
 ### C++ using enum
 
 - [magic\_enum](https://github.com/Neargye/magic_enum) by [Neargye](https://github.com/Neargye)
@@ -297,18 +255,6 @@ t# Daring Sailor: tasks
 - :newspaper: [String enum — строковые enum | Хабр](https://habr.com/ru/articles/236403/)
 
 - :beginner: [C++ | Перечисления](https://metanit.com/cpp/tutorial/5.9.php)
-
-### C++ template class
-
-- :speech_balloon: [c++ - How to avoid specifying arguments for a class template with default template arguments | SO](https://stackoverflow.com/questions/15373823/how-to-avoid-specifying-arguments-for-a-class-template-with-default-template-arg)
-- :speech_balloon: [Inheriting from a template class in c++ | SO](https://stackoverflow.com/questions/8810224/inheriting-from-a-template-class-in-c)
-- :beginner: [Шаблоны классов | Microsoft Learn](https://learn.microsoft.com/ru-ru/cpp/cpp/class-templates?view=msvc-170)
-
-### C++ multiple inheritance
-
-- [Multiple Inheritance in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/multiple-inheritance-in-c/)
-
-### C++ abstract class
 
 ### :no_entry_sign: C++ set field by name
 
@@ -328,38 +274,7 @@ t# Daring Sailor: tasks
 
 - :newspaper: [“Why doesn’t my code work?” — to anyone learning the art of programming and writing to the Stack Overflow community | by Andrey Karpov | Medium](https://medium.com/@Code_Analysis/why-doesnt-my-code-work-62a8b92956a)
 
-### C++ destructors
-
-- :speech_balloon: [c++ - Destructor for char arrays Error | SO](https://stackoverflow.com/questions/24685133/destructor-for-char-arrays-error)
-	- There is no need to check for `NULL` when issuing a `delete`
-
-- https://stackoverflow.com/questions/36020149/how-to-design-class-that-has-char-pointer-as-class-member-variable
-
 ### C++ attributes
 
 - :speech_balloon: [c++ - Атрибут nodiscard - Stack Overflow на русском](https://ru.stackoverflow.com/questions/1251814/%D0%90%D1%82%D1%80%D0%B8%D0%B1%D1%83%D1%82-nodiscard)
 
-### C++ std::any
-
-- :speech_balloon: [c++ - std::any without RTTI, how does it work? | SO](https://stackoverflow.com/questions/51361606/stdany-without-rtti-how-does-it-work)
-	- Basically, `std::any` holds two things:
-		- A pointer to a (dynamically) allocated storage
-			- A pointer to a "storage manager function"
-
- - :newspaper: [C++ | std::any - comparison with void\* and motivating examples - nextptr](https://www.nextptr.com/tutorial/ta1571648512/stdany-comparison-with-void-and-motivating-examples)
-
- - :beginner: [std::any\_cast - cppreference.com](https://en.cppreference.com/w/cpp/utility/any/any_cast)
-
-### C++ call super constructor
-
-- :speech_balloon: [c++ - What are the rules for calling the base class constructor? | SO](https://stackoverflow.com/questions/120876/what-are-the-rules-for-calling-the-base-class-constructor)
-
-- :speech_balloon: [c++ - Why is my override method not being called? | SO](https://stackoverflow.com/questions/42149093/why-is-my-override-method-not-being-called)
-	- While you're inside a constructor, the derived class hasn't been constructed yet, so it effectively doesn't exist - constructors are executed base first, derived second. Any member calls you make from the base class constructor will be to the base class members.
-	- If you would call `Show` in derived class from the ctor of the base class, `Child::Show` would use data fields of `Child` but the ctor of the derived class has not been called yet.
-
-- [How can I call overridden function from constructor? - Development / Programming & Scripting - Epic Developer Community Forums](https://forums.unrealengine.com/t/how-can-i-call-overridden-function-from-constructor/287695)
-	- In Unreal Engine there are special init functions, like `OnConstruction` and `PostSpawn`, they are called automatically by the engine on every actors’ construction.
-
-- :speech_balloon: [c++ - Do I need to explicitly call the base virtual destructor? | SO](https://stackoverflow.com/questions/677620/do-i-need-to-explicitly-call-the-base-virtual-destructor)
-	- Destructors are called automatically in the reverse order of construction. (Base classes last). Do not call base class destructors.
