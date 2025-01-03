@@ -7,7 +7,19 @@ t# Daring Sailor: tasks
 
 ## :black_square_button: Demo with compression
 
-- [ ] huffman alone may be enough for JSON compression
+- [ ] huffman alone may be good enough for JSON compression
+
+### C++ semantic versioning lib
+
+- [ ] [semver](https://github.com/Neargye/semver) by [Neargye](https://github.com/Neargye)
+	- _Semantic Versioning for modern C++_
+	- 900+ строк
+	- C++11 support (from code)
+
+- [cpp-semver](https://github.com/z4kn4fein/cpp-semver) by [z4kn4fein](https://github.com/z4kn4fein)
+	- C++ 11
+	- _Semantic Versioning library for modern C++._
+	- 400+ строк
 
 ### EWRAM
 
@@ -126,16 +138,17 @@ t# Daring Sailor: tasks
 
 - :speech_balloon: [строки - ISO C++ forbids converting a string constant to 'char\*' | SO на русском](https://ru.stackoverflow.com/questions/919457/iso-c-forbids-converting-a-string-constant-to-char)
 
-- [ ] :beginner: [RapidJSON: SAX](https://rapidjson.org/md_doc_sax.html)
+- [x] :beginner: [RapidJSON: SAX](https://rapidjson.org/md_doc_sax.html)
 	- :rotating_light: :point_right: [[gd-garbage#^d9k-gba-radidjson-error-2024-12-03|garbage: GBA RapidJSON]]
-		 - [ ] :rotating_light: `undefined reference to std::basic_ostream`
+		 - [x] :rotating_light: `undefined reference to std::basic_ostream`
+			 - (Σ) `USERLDFLAGS    := -lstdc++` in `Makefile`
 			 - :speaking_head_in_silhouette: [at butano Discord](https://discord.com/channels/768759024270704641/831589248239009832/1313492009431994428)
-				 - [ ] [bn::ostringstream class | Butano Docs](https://gvaliente.github.io/butano/classbn_1_1ostringstream.html)
+				 - [bn::ostringstream class | Butano Docs](https://gvaliente.github.io/butano/classbn_1_1ostringstream.html)
 
 - [Frequently asked questions (FAQ) | Butano Docs](https://gvaliente.github.io/butano/faq.html#faq_stack_trace)
 	- :toolbox: [GCC and MSVC C++ Demangler](https://demangler.com/)
 
-### :black_square_button: Choosing serialization library
+### :white_check_mark: Choosing serialization library
 
 - :point_right: [[serialize-data-for-embedded]] [(weblink)](https://github.com/d9k/d9k-public-notes/blob/main/pr-data/serialize-data-for-embedded.md)
 - :beginner: [RapidJSON: SAX](https://rapidjson.org/md_doc_sax.html)
@@ -144,7 +157,7 @@ t# Daring Sailor: tasks
 
 ### :hand: Generate 64 kb JSON
 
-- (Σ) Just downladed dataset from kaggle for now
+- (Σ) Just downloaded dataset from kaggle for now
 
 - :beginner: [Unique Values | Faker.js](https://fakerjs.dev/guide/unique)
 
@@ -214,6 +227,12 @@ t# Daring Sailor: tasks
 
 ## #Cpp
 
+- :speech_balloon: [c++ - How to disable warnings for particular include files? | SO](https://stackoverflow.com/questions/6321839/how-to-disable-warnings-for-particular-include-files)
+	- `gcc -isystem path/to/dir`
+
+- [Rule of three (C++ programming) - Wikipedia](https://en.wikipedia.org/wiki/Rule_of_three_(C%2B%2B_programming))
+	:speech_balloon: [c++ - What is The Rule of Three? | SO](https://stackoverflow.com/questions/4172722/what-is-the-rule-of-three)
+
 - :speech_balloon: [c++ - STL List to hold structure pointers | SO](https://stackoverflow.com/questions/1085489/stl-list-to-hold-structure-pointers)
 
 - :speech_balloon: [c - Why structs cannot be assigned directly? | SO](https://stackoverflow.com/questions/12189480/why-structs-cannot-be-assigned-directly)
@@ -226,6 +245,21 @@ t# Daring Sailor: tasks
 
 - strings concatenation?
 	- `const char welcome[] = "print('-= " LUA_PROGNAME " " LUA_PROGVER " =-')";`
+
+- [x] `std::string::assign()` error
+	- `USERLDFLAGS    := -lstdc++`
+	- :rotating_light: `_M_replace_cold undefined reference`
+		- :speech_balloon: [Build errors with GCC 13 | issue #3292 | sonic-pi · GitHub](https://github.com/sonic-pi-net/sonic-pi/issues/3292)
+		- :speech_balloon: [Почему возникает проблема? — Хабр Q&A](https://qna.habr.com/q/1221810)
+			- _Сообщение **undefined reference to** значит, что компилятор функцию знает, но линкер не догадывается, где она валяется. Для исправления надо включить в проект файлы с телами всех используемых версий всех функций. Если функции библиотечные, то это делается подключением lib файлов, или со статическими библиотеками, или с библиотеками импорта в зависимости от того, валяются ли функции в lib, или в dll. В том числе это относится к своим библиотекам. В остальных случаях добавить в проект файлы с исходниками тел функций._
+		- :speech_balloon: [Wonderful toolchain: std::string::assign linker error | issue #80 | butano](https://github.com/GValiente/butano/issues/80)
+
+- :newspaper: [std::stringstream и форматирование строк | Хабр](https://habr.com/ru/articles/131977/)
+
+- `rvalue`
+	- :newspaper: [Понимание lvalue и rvalue в C и С++ | Хабр](https://habr.com/ru/articles/348198/)
+	- :speech_balloon: [c++ - Why is it illegal to take the address of an rvalue temporary? | SO](https://stackoverflow.com/questions/8763398/why-is-it-illegal-to-take-the-address-of-an-rvalue-temporary)
+	- :speech_balloon: [c++ - Taking the address of a temporary object | SO](https://stackoverflow.com/questions/2280688/taking-the-address-of-a-temporary-object/2281928#2281928)
 
 ### C++ links
 
@@ -246,6 +280,12 @@ t# Daring Sailor: tasks
 	- `std::string` like container with a fixed size buffer.
 
 - _Storing a `bn::string` in rom seems a bit wasteful, when you can store a `bn::string_view` [GValiente](https://discord.com/channels/768759024270704641/831589248239009832/1277140156742242376)
+
+### Butano exceptions
+
+- :speaking_head_in_silhouette: `exception handling disabled, use '-fexceptions' to enable` - Any stong reason for this? Many third-part c++ libraries use exceptions. / [2025.01.01](https://discord.com/channels/768759024270704641/831589248239009832/1323747184407216170)
+	- _Saves space and you can turn it back on. Exceptions are a much slower path than checking for conditions ahead of time and many you’ll encounter on an embedded system are not necessarily recoverable_ / Luigi
+	- The safe (and naive) way would be compiling third-party libraries seperately with exceptions enabled, while compiling your code with exceptions disabled (edited). And link them afterwards. This way, if exceptions are passed to the user code side, `std::terminate()` should be called, which at least shows abort error screen on Butano / [yeon](https://discord.com/channels/768759024270704641/831589248239009832/1323879117644370061)
 
 ### C++ using enum
 
@@ -278,3 +318,8 @@ t# Daring Sailor: tasks
 
 - :speech_balloon: [c++ - Атрибут nodiscard - Stack Overflow на русском](https://ru.stackoverflow.com/questions/1251814/%D0%90%D1%82%D1%80%D0%B8%D0%B1%D1%83%D1%82-nodiscard)
 
+### C++ circular deps
+
+- :speech_balloon: [c++ - Resolve build errors due to circular dependency amongst classes | SO](https://stackoverflow.com/questions/625799/resolve-build-errors-due-to-circular-dependency-amongst-classes)
+	- You can avoid compilation errors if you remove the method definitions from the header files and let the classes contain only the method declarations and variable declarations/definitions.
+	- Best practice: forward declaration headers
