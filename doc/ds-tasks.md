@@ -66,7 +66,54 @@ t# Daring Sailor: tasks
 
 - :speech_balloon: [c++ how to free memory \*char? | SO](https://stackoverflow.com/questions/14927243/c-how-to-free-memory-char)
 
-## Demo: SAX-style parser: parsing to class
+## :black_square_button: Demo: Savegame JSON: GUI
+
+- [gba/cpp-butano/savegame-json | d9k-gamedev-examples](https://github.com/d9k/d9k-gamedev-examples/tree/main/gba/cpp-butano/savegame-json) by [d9k-gamedev-examples](https://github.com/d9k-gamedev-examples)
+
+- 128/16=8 lines
+
+- [ ] 1st screen:
+	- lines
+		- num / total
+		- id (* if differs from SRAM)
+		- year
+		- name (2 lines)
+	- right/down - next, left/up - previous
+	- start/select -
+
+- [ ] 2nd screen:
+	- lines
+		- name
+		- num. name
+		- at right: description scroll position / total
+		- 5 lines of desription. If not beginning, first glyph is up arrow. If not end, last glyph is down arrow.
+	- right/down - next, left/up - previous
+	- start/select -
+
+- [ ] BN_CONCAT?
+
+- ScreenTextCaptionValuePair
+	- `(*staticSprites, *dynamicSprites)`
+	- static_caption
+	- dynamic_value
+	- static_to_sprites() - 1
+	- dynamic_to_sprites() - 2
+	- rerender() - 2 or 1+2
+	- reset() - forces 1 next time
+	- static_rendered: bool
+	- cy_shift
+	- cx_shift
+
+- ScreenTextRowsContainer
+	- first_row_cy_shift
+	- cx_shift
+	- row_height
+	- clear_static()
+	- clear_dynamic()
+
+## :white_check_mark: Demo: SAX-style parser: parsing to class
+
+- [gba/cpp-butano/savegame-json | d9k-gamedev-examples](https://github.com/d9k/d9k-gamedev-examples/tree/main/gba/cpp-butano/savegame-json) by [d9k-gamedev-examples](https://github.com/d9k-gamedev-examples)
 
 - `ParsersStack`
 	- `parsers`
