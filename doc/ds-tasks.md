@@ -66,13 +66,12 @@ t# Daring Sailor: tasks
 
 - :speech_balloon: [c++ how to free memory \*char? | SO](https://stackoverflow.com/questions/14927243/c-how-to-free-memory-char)
 
-## :black_square_button: Demo: Savegame JSON: GUI
+## :white_check_mark: Demo: Savegame JSON: GUI
 
 - [gba/cpp-butano/savegame-json | d9k-gamedev-examples](https://github.com/d9k/d9k-gamedev-examples/tree/main/gba/cpp-butano/savegame-json) by [d9k-gamedev-examples](https://github.com/d9k-gamedev-examples)
-
 - 128/16=8 lines
 
-- [ ] 1st screen:
+- [x] 1st screen:
 	- lines
 		- num / total
 		- id (* if differs from SRAM)
@@ -81,7 +80,7 @@ t# Daring Sailor: tasks
 	- right/down - next, left/up - previous
 	- start/select -
 
-- [ ] 2nd screen:
+- [x] 2nd screen:
 	- lines
 		- name
 		- num. name
@@ -90,10 +89,29 @@ t# Daring Sailor: tasks
 	- right/down - next, left/up - previous
 	- start/select -
 
-- [ ] BN_CONCAT?
+- [x] change toolkit to DevKitARM from WonderfullToolchain
+	- [x] :rotating_light: :point_right: [[gd-garbage#^d9k-butano-savegame-json-devkitarm-error-2025-01-18|garbage: Butano savegame JSON DevkitARM error]]
+		- (Σ) The reason was in `%f` usage in `sprintf()`
+		- [x] Compare preprocessor output of toolchains
+		- :speech_balloon: [gcc - How to view C preprocessor output? | SO](https://stackoverflow.com/questions/3742822/how-to-view-c-preprocessor-output)
+			- [ ] :speaking_head_in_silhouette: _How can I compare result output after preprocessesor (but before compiler) of C++ code generated both with Wonderful Toolchain & DevKitARM?_ / [2025.01.18](https://discord.com/channels/768759024270704641/831589248239009832/1330210796034195486)
+		- [x] temporary prohibit compilation with DevKitARM
+			- [x] :speech_balloon: [Is it possible to "unset" an environment variable in a Makefile? | SO](https://stackoverflow.com/questions/2188313/is-it-possible-to-unset-an-environment-variable-in-a-makefile)
+				- (Σ) `undefine DEVKITARM`…
 
-- ScreenTextCaptionValuePair
-	- `(*staticSprites, *dynamicSprites)`
+## :white_check_mark: Demo: screen text classes
+
+- [screen-text-classes | d9k-gamedev-examples](https://github.com/d9k/d9k-gamedev-examples/tree/main/gba/cpp-butano/screen-text-classes)
+
+- [x] `screen_text::ScrollableBlock`
+	- get_rows_num()
+	- render()
+	- set_text()
+	- get_scroll_row_max()
+	- set_scroll_row_position()
+
+- [x] `screen_text::CaptionValuePair`
+	- `constructor(*staticSprites, *dynamicSprites)`
 	- static_caption
 	- dynamic_value
 	- static_to_sprites() - 1
@@ -104,12 +122,59 @@ t# Daring Sailor: tasks
 	- cy_shift
 	- cx_shift
 
-- ScreenTextRowsContainer
+- [x] `screen_text::RowsComposer`
+	- add_text_block(b)
+	- set_rows_starting_from(b, first_row_n)
+	- delete_all_rows()
 	- first_row_cy_shift
 	- cx_shift
 	- row_height
 	- clear_static()
 	- clear_dynamic()
+%% 	- `_static_rows_nums: list (array)` %%
+%% 	- add_row(r)
+	- set_row(n) %%
+
+
+- Choosing fonts
+	- [gba-free-fonts](https://github.com/laqieer/gba-free-fonts?tab=readme-ov-file) by [laqieer](https://github.com/laqieer)
+		- _Free font resources for GBA game development_
+		- [ ] Unifont
+		- [x] :rotating_light: `AttributeError: module 'PIL.Image' has no attribute 'Palette'` on :zap: `make`
+			- (Σ) `pip install Pillow==11`
+			- `pip show Pillow`
+				- Version: 9.0.1
+			- :speaking_head_in_silhouette: [Error: module 'PIL.Image' has no attribute 'Palette' | issue #6 | gba-free-fonts](https://github.com/laqieer/gba-free-fonts/issues/6)
+
+- [ ] BN_CONCAT?
+
+- [ ] array last member is skipped if no log!
+	- :speech_balloon: [c++ - Check array position for null/empty | SO](https://stackoverflow.com/questions/19132411/check-array-position-for-null-empty)
+	- [x] [No$gba exception setup guide | Butano Docs](https://gvaliente.github.io/butano/nocashgba_exception.html)
+		- If you load an *.elf file instead of a *.gba file, it also shows the high level code that has triggered the exception. Please remember that *.elf support only works with devkitARM, it doesn't work if you're using Wonderful Toolchain.
+	- [ ] [Bug in gcc: null pointer check removed : r/cpp](https://www.reddit.com/r/cpp/comments/cwt29t/bug_in_gcc_null_pointer_check_removed/)
+	- [-] :beginner: [Common Function Attributes (Using the GNU Compiler Collection (GCC))](https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html)
+		- [-] `cold`
+	- [90949 – [9 Regression] null pointer check removed](https://gcc.gnu.org/bugzilla/show_bug.cgi?id=90949)
+	- :speech_balloon: [How can I prevent GCC optimizing some statements in C? | SO](https://stackoverflow.com/questions/2219829/how-can-i-prevent-gcc-optimizing-some-statements-in-c)
+
+- [ ] `has no member` (135) VS Code error for `bn::sprite_text_generator::alignment_type`
+	- :speech_balloon: [Incorrect IntelliSense error "class has no member" | issue #6699 | vscode-cpptools](https://github.com/microsoft/vscode-cpptools/issues/6699)
+
+### :black_square_button: SceneSelector
+
+- _selectedScene: SelectedScene
+- _next_manually_selected_scene()
+- _auto_select_order: SelectedScene[]
+- showInfo: boolean
+- select_scene_manually()
+- show_scene()
+
+```
+while() {
+  SceneSelector.show_scene();
+}
+```
 
 ## :white_check_mark: Demo: SAX-style parser: parsing to class
 
@@ -334,6 +399,10 @@ t# Daring Sailor: tasks
 	- _Saves space and you can turn it back on. Exceptions are a much slower path than checking for conditions ahead of time and many you’ll encounter on an embedded system are not necessarily recoverable_ / Luigi
 	- The safe (and naive) way would be compiling third-party libraries seperately with exceptions enabled, while compiling your code with exceptions disabled (edited). And link them afterwards. This way, if exceptions are passed to the user code side, `std::terminate()` should be called, which at least shows abort error screen on Butano / [yeon](https://discord.com/channels/768759024270704641/831589248239009832/1323879117644370061)
 
+### C++ arrays
+
+- :speech_balloon: [eclipse - c++ error: expected unqualified-id before '\[' token | SO](https://stackoverflow.com/questions/5575095/c-error-expected-unqualified-id-before-token)
+
 ### C++ using enum
 
 - [magic\_enum](https://github.com/Neargye/magic_enum) by [Neargye](https://github.com/Neargye)
@@ -370,3 +439,25 @@ t# Daring Sailor: tasks
 - :speech_balloon: [c++ - Resolve build errors due to circular dependency amongst classes | SO](https://stackoverflow.com/questions/625799/resolve-build-errors-due-to-circular-dependency-amongst-classes)
 	- You can avoid compilation errors if you remove the method definitions from the header files and let the classes contain only the method declarations and variable declarations/definitions.
 	- Best practice: forward declaration headers
+
+### C++ code style
+
+- my code style
+	- class name: `MyClass`
+	- method name: `my_method`
+	- method param name: `importantParam1`
+
+- from butano source?
+	- method name: `set_show_always`
+	- class field `free_items`
+	- method params: `text_lines`
+	- class name: `best_fit_allocator`
+	- macro name: `BN_LOG`
+	- macro const: `BN_CFG_BEST_FIT_ALLOCATOR_FREE_CHECK_ENABLED`
+	- variable inside method: `int_destination`
+	- template argument name: `MaxSize`
+
+### C++ libs
+
+- [hedley](https://github.com/nemequ/hedley) by [nemequ](https://github.com/nemequ)
+	- _A C/C++ header to help move #ifdefs out of your code_
