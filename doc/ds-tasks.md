@@ -66,243 +66,7 @@ t# Daring Sailor: tasks
 
 - :speech_balloon: [c++ how to free memory \*char? | SO](https://stackoverflow.com/questions/14927243/c-how-to-free-memory-char)
 
-## :white_check_mark: Demo: Savegame JSON: GUI
-
-- [gba/cpp-butano/savegame-json | d9k-gamedev-examples](https://github.com/d9k/d9k-gamedev-examples/tree/main/gba/cpp-butano/savegame-json) by [d9k-gamedev-examples](https://github.com/d9k-gamedev-examples)
-- 128/16=8 lines
-
-- [x] 1st screen:
-	- lines
-		- num / total
-		- id (* if differs from SRAM)
-		- year
-		- name (2 lines)
-	- right/down - next, left/up - previous
-	- start/select -
-
-- [x] 2nd screen:
-	- lines
-		- name
-		- num. name
-		- at right: description scroll position / total
-		- 5 lines of desription. If not beginning, first glyph is up arrow. If not end, last glyph is down arrow.
-	- right/down - next, left/up - previous
-	- start/select -
-
-- [x] change toolkit to DevKitARM from WonderfullToolchain
-	- [x] :rotating_light: :point_right: [[gd-garbage#^d9k-butano-savegame-json-devkitarm-error-2025-01-18|garbage: Butano savegame JSON DevkitARM error]]
-		- (Σ) The reason was in `%f` usage in `sprintf()`
-		- [x] Compare preprocessor output of toolchains
-		- :speech_balloon: [gcc - How to view C preprocessor output? | SO](https://stackoverflow.com/questions/3742822/how-to-view-c-preprocessor-output)
-			- [ ] :speaking_head_in_silhouette: _How can I compare result output after preprocessesor (but before compiler) of C++ code generated both with Wonderful Toolchain & DevKitARM?_ / [2025.01.18](https://discord.com/channels/768759024270704641/831589248239009832/1330210796034195486)
-		- [x] temporary prohibit compilation with DevKitARM
-			- [x] :speech_balloon: [Is it possible to "unset" an environment variable in a Makefile? | SO](https://stackoverflow.com/questions/2188313/is-it-possible-to-unset-an-environment-variable-in-a-makefile)
-				- (Σ) `undefine DEVKITARM`…
-
-## :white_check_mark: Demo: screen text classes
-
-- [screen-text-classes | d9k-gamedev-examples](https://github.com/d9k/d9k-gamedev-examples/tree/main/gba/cpp-butano/screen-text-classes)
-
-- [x] `screen_text::ScrollableBlock`
-	- get_rows_num()
-	- render()
-	- set_text()
-	- get_scroll_row_max()
-	- set_scroll_row_position()
-
-- [x] `screen_text::CaptionValuePair`
-	- `constructor(*staticSprites, *dynamicSprites)`
-	- static_caption
-	- dynamic_value
-	- static_to_sprites() - 1
-	- dynamic_to_sprites() - 2
-	- rerender() - 2 or 1+2
-	- reset() - forces 1 next time
-	- static_rendered: bool
-	- cy_shift
-	- cx_shift
-
-- [x] `screen_text::RowsComposer`
-	- add_text_block(b)
-	- set_rows_starting_from(b, first_row_n)
-	- delete_all_rows()
-	- first_row_cy_shift
-	- cx_shift
-	- row_height
-	- clear_static()
-	- clear_dynamic()
-%% 	- `_static_rows_nums: list (array)` %%
-%% 	- add_row(r)
-	- set_row(n) %%
-
-
-- Choosing fonts
-	- [gba-free-fonts](https://github.com/laqieer/gba-free-fonts?tab=readme-ov-file) by [laqieer](https://github.com/laqieer)
-		- _Free font resources for GBA game development_
-		- [ ] Unifont
-		- [x] :rotating_light: `AttributeError: module 'PIL.Image' has no attribute 'Palette'` on :zap: `make`
-			- (Σ) `pip install Pillow==11`
-			- `pip show Pillow`
-				- Version: 9.0.1
-			- :speaking_head_in_silhouette: [Error: module 'PIL.Image' has no attribute 'Palette' | issue #6 | gba-free-fonts](https://github.com/laqieer/gba-free-fonts/issues/6)
-
-- [ ] BN_CONCAT?
-
-- [ ] array last member is skipped if no log!
-	- :speech_balloon: [c++ - Check array position for null/empty | SO](https://stackoverflow.com/questions/19132411/check-array-position-for-null-empty)
-	- [x] [No$gba exception setup guide | Butano Docs](https://gvaliente.github.io/butano/nocashgba_exception.html)
-		- If you load an *.elf file instead of a *.gba file, it also shows the high level code that has triggered the exception. Please remember that *.elf support only works with devkitARM, it doesn't work if you're using Wonderful Toolchain.
-	- [ ] [Bug in gcc: null pointer check removed : r/cpp](https://www.reddit.com/r/cpp/comments/cwt29t/bug_in_gcc_null_pointer_check_removed/)
-	- [-] :beginner: [Common Function Attributes (Using the GNU Compiler Collection (GCC))](https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html)
-		- [-] `cold`
-	- [90949 – [9 Regression] null pointer check removed](https://gcc.gnu.org/bugzilla/show_bug.cgi?id=90949)
-	- :speech_balloon: [How can I prevent GCC optimizing some statements in C? | SO](https://stackoverflow.com/questions/2219829/how-can-i-prevent-gcc-optimizing-some-statements-in-c)
-
-- [ ] `has no member` (135) VS Code error for `bn::sprite_text_generator::alignment_type`
-	- :speech_balloon: [Incorrect IntelliSense error "class has no member" | issue #6699 | vscode-cpptools](https://github.com/microsoft/vscode-cpptools/issues/6699)
-
-### :black_square_button: SceneSelector
-
-- _selectedScene: SelectedScene
-- _next_manually_selected_scene()
-- _auto_select_order: SelectedScene[]
-- showInfo: boolean
-- select_scene_manually()
-- show_scene()
-
-```
-while() {
-  SceneSelector.show_scene();
-}
-```
-
-## :white_check_mark: Demo: SAX-style parser: parsing to class
-
-- [gba/cpp-butano/savegame-json | d9k-gamedev-examples](https://github.com/d9k/d9k-gamedev-examples/tree/main/gba/cpp-butano/savegame-json) by [d9k-gamedev-examples](https://github.com/d9k-gamedev-examples)
-
-- `ParsersStack`
-	- `parsers`
-	- `add`
-	- `pop`
-	- `parseTocken()`
-		- :beginner: [Token-by-Token Parsing | RapidJSON: SAX](https://rapidjson.org/md_doc_sax.html)
-	- `std::vector`
-	- [-] `std::list`
-		- :rotating_light: :point_right: [[gd-garbage#^d9k-gba-std-list-fail-2024-12-23|garbage: GBA std list fail]]
-	- base class methods calls base class fields
-		- :rotating_light: `member function declared with 'override' does not override a base class member`
-	- :rotating_light: `undefined reference to std::__throw_length_error`
-		- [x] [Arduino Due warning: std::\_\_throw\_length\_error(char const\*) - Mega / Due - Arduino Forum](https://forum.arduino.cc/t/arduino-due-warning-std-__throw_length_error-char-const/308515)
-
-- [ ] `char*` from `const char*?`
-	- [ ] :speech_balloon: [c++ - How to store a const char\* to a char\*? | SO](https://stackoverflow.com/questions/36789380/how-to-store-a-const-char-to-a-char)
-
-- [ ] `lastParseEvent:`
-	- :beginner: [C++ | Перечисления](https://metanit.com/cpp/tutorial/5.9.php)
-	- `PARSE_EVENT_WAIT_NEXT_TOKEN = 0`
-	- `PARSE_EVENT_IMMERSE_TO_SUBPARSER = 1`
-	- `PARSE_EVENT_PARSE_FINISHED = 2`
-
-- `currentFieldName: string`
-- `currentFieldSubparser: Parser`
-- `result: any`
-
-- `parserFinished`
-
-- `onSubparserFinished(subparser)`
-
-- `parsingHandlersStack std::list`
-
-- `.nextParsingHandler` - if not null, add handler to stack
-- `.parseEnd: true`
-- `.parseResult: any`
-
-### Movie class declaration
-
-#### string field in #Cpp class
-
-- :tv: [Optimizing A String Class for Computer Graphics in Cpp - Zander Majercik, Morgan McGuire CppCon 22 | YT](https://www.youtube.com/watch?v=fglXeSWGVDc)
-
-- :speech_balloon: [pointers - C++ char\* as a class member | SO](https://stackoverflow.com/questions/41416226/c-char-as-a-class-member/41416259#41416259)
-	- _You aren't using pointers for `a1` and `a2`. `a2 = a1;` creates a copy of `a1` and assigns it to `a2`, they don't refer to the same object_
-- :speech_balloon: [C++ pointer to objects | SO](https://stackoverflow.com/questions/2988273/c-pointer-to-objects)
-	- `MyClass myClass` - allocate on stack. The memory allocated for the object is automatically released when myClass variable goes out of scope.
-	- `MyClass* p = new MyClass();` In that case, you have to take care of releasing the memory by doing delete yourself.
-	- _I always prefer to use the stack allocated objects whenever possible as I don't have to be bothered about the memory management._
-	- `MyClass* myclassptr = &myclass;`
-
-
-### :white_check_mark:  include resources file
-
-- :speech_balloon: ["#include" a text file in a C program as a char\[\] | SO](https://stackoverflow.com/questions/410980/include-a-text-file-in-a-c-program-as-a-char/25021520#25021520)
-- :speech_balloon: [c++ - Include a file as a string | SO](https://stackoverflow.com/questions/43256465/include-a-file-as-a-string)
-
-- `palestinian_movies.json`
-	- 41kb в JSON
-	- 39kb в JSON5: -4.8%
-
-- `palestinian_movies_cut.json`
-	- cut to 29549 bytes
-	- validated with :toolbox: [JSON Online Validator and Formatter - JSON Lint](https://jsonlint.com/)
-
-- :speech_balloon: [Substring of char\[\] in c++ | SO](https://stackoverflow.com/questions/15586586/substring-of-char-in-c)
-	- cut part
-
-- :speech_balloon: [строки - ISO C++ forbids converting a string constant to 'char\*' | SO на русском](https://ru.stackoverflow.com/questions/919457/iso-c-forbids-converting-a-string-constant-to-char)
-
-- [x] :beginner: [RapidJSON: SAX](https://rapidjson.org/md_doc_sax.html)
-	- :rotating_light: :point_right: [[gd-garbage#^d9k-gba-radidjson-error-2024-12-03|garbage: GBA RapidJSON]]
-		 - [x] :rotating_light: `undefined reference to std::basic_ostream`
-			 - (Σ) `USERLDFLAGS    := -lstdc++` in `Makefile`
-			 - :speaking_head_in_silhouette: [at butano Discord](https://discord.com/channels/768759024270704641/831589248239009832/1313492009431994428)
-				 - [bn::ostringstream class | Butano Docs](https://gvaliente.github.io/butano/classbn_1_1ostringstream.html)
-
-- [Frequently asked questions (FAQ) | Butano Docs](https://gvaliente.github.io/butano/faq.html#faq_stack_trace)
-	- :toolbox: [GCC and MSVC C++ Demangler](https://demangler.com/)
-
-### :white_check_mark: Choosing serialization library
-
-- :point_right: [[serialize-data-for-embedded]] [(weblink)](https://github.com/d9k/d9k-public-notes/blob/main/pr-data/serialize-data-for-embedded.md)
-- :beginner: [RapidJSON: SAX](https://rapidjson.org/md_doc_sax.html)
-- JSON5
-	- no SAX JSON5 library?
-
-### :hand: Generate 64 kb JSON
-
-- (Σ) Just downloaded dataset from kaggle for now
-
-- :beginner: [Unique Values | Faker.js](https://fakerjs.dev/guide/unique)
-
-- [faker-cxx](https://github.com/cieslarmichal/faker-cxx) by [cieslarmichal](https://github.com/cieslarmichal)
-	- #Cpp _faker library for generating fake (but realistic) data_
-	 - Compiler support
-		- :microbe: GCC➚ version `12` or newer
-			- having `11.4`
-			- :speech_balloon: [add gcc 11 support | issue #596 | faker-cxx](https://github.com/cieslarmichal/faker-cxx/issues/596)
-	- generate array of unique words?
-		- GTest (set `BUILD_TESTING=OFF` CMake flag to disable this dependency)
-
-- `src/modules/food_data.h`
-
-- [JSON Generator – tool for generating random JSON data](https://app.json-generator.com/signin)
-
-- example JSON files
-	- https://microsoftedge.github.io/Demos/json-dummy-data/
-		- just persons. need more numbers and nested objects
-	- [Sample users JSON file to import](https://gist.github.com/saltukalakus/124bba04327d8e5eab605d4fb66c53b8)
-		- not nested. short
-	- [awesome-json-datasets](https://github.com/jdorfman/awesome-json-datasets) by [jdorfman](https://github.com/jdorfman)
-		- :fallen_leaf: 2019
-		- _A curated list of awesome JSON datasets that don't require authentication._
-	- [Wikidata jsons](https://www.kaggle.com/datasets/timoboz/wikidata-jsons?resource=download)
-		- `wikida_type_dict.json`
-			- `~2gb`
-	- [Palestinian Movies JSON Dataset](https://www.kaggle.com/datasets/sondosaabed/palestinian-movies-json-dataset)
-		- `35.57kb`
-	- [JSON datasets | Search | Kaggle](https://www.kaggle.com/search?q=json+in%3Adatasets)
-	- [json files of datasets | kaggle](https://www.kaggle.com/datasets/karthikrathod/json-files-of-datasets)
-
-## Save game
+## :black_square_button: Save game
 
 - (and generated map)
 
@@ -336,6 +100,26 @@ while() {
 	- :open_file_folder: `games/butano-fighter/src/bf_stats.cpp`
 	- [Frequently asked questions (FAQ) | Butano Docs](https://gvaliente.github.io/butano/faq.html)
 		- `BN_DATA_EWRAM`
+
+## Raw coding ideas
+
+- [ ] `BN_CONCAT` macro
+
+### :black_square_button: SceneSelector
+
+- _selectedScene: SelectedScene
+- _next_manually_selected_scene()
+- _auto_select_order: SelectedScene[]
+- showInfo: boolean
+- select_scene_manually()
+- show_scene()
+
+```
+while() {
+  SceneSelector.show_scene();
+}
+```
+
 
 ## #Cpp
 
