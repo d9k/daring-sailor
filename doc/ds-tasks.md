@@ -66,6 +66,56 @@ t# Daring Sailor: tasks
 
 - :speech_balloon: [c++ how to free memory \*char? | SO](https://stackoverflow.com/questions/14927243/c-how-to-free-memory-char)
 
+##  SaveGame demo bugs
+
+- [ ] :speaking_head_in_silhouette: I would be glad if someone would record video executing my demo on real GBA hardware / [2025.01.22](https://discord.com/channels/768759024270704641/813090772324712528/1331588757438201866)
+
+- [ ] Memory leaks
+	- (Σ) 2025.01.22: fixed most memory leaks. For now 1 kb leaks on load and ~ 300 bytes on save
+	- _One last thing, after saving on any movie, there's a recreatable crash by reloading 10 times. On hardware the program just freezes on the "Reading SRAM" page, but in mGBA you get butano's error._ / [PyroPyro](https://discord.com/channels/768759024270704641/813090772324712528/1331601168178221127)
+	- :point_right: [[gd-garbage#^d9k-butano-savegame-json-save-memory-leak-2025-01-22|garbage: save memory leak ]]
+	- :point_right: [[gd-garbage#^d9k-butano-savegame-json-load-memory-leak-2025-01-22|garbage: load memory leak]]
+- :rotating_light: `No more sprite tiles items available`
+	- on `Life in occupied Palestine...`
+	- `constexpr int max_items = BN_CFG_SPRITE_TILES_MAX_ITEMS;`
+	- `#define BN_CFG_SPRITE_TILES_MAX_ITEMS 128`
+	- :open_file_folder: `butano/src/bn_sprite_tiles_manager.cpp`
+		-
+
+## :white_check_mark: Web export Savegame JSON example
+
+- [ ] [d9k/d9k.github.io](https://github.com/d9k/d9k.github.io)
+
+- https://github.com/d9k/d9k-gamedev-examples/raw/refs/heads/main/gba/cpp-butano/savegame-json/savegame-json.gba
+
+### Chosing hosting
+
+- [ ] GitHub pages, no jekyll
+	- [upload-pages-artifact](https://github.com/actions/upload-pages-artifact) by [actions](https://github.com/actions)
+		- _A composite action for packaging and uploading an artifact that can be deployed to GitHub Pages._
+	- :beginner: [Hosting HTML, JS and CSS pages simply with GitHub Pages](https://notepad.onghu.com/2024/hosting-a-site-simply-with-github-pages/)
+	- :beginner: [Sunsetting GitHub Pages’ legacy worker - GitHub Changelog](https://github.blog/changelog/2024-07-08-pages-legacy-worker-sunset/)
+	- [ ] :warning: no html at https://d9k.github.io/d9k-gamedev-examples/index.html!
+		- :speech_balloon: [Github Pages site not detecting index.html | SO](https://stackoverflow.com/questions/45362628/github-pages-site-not-detecting-index-html)
+
+
+- [ ] GitHub pages, jekyll
+	- :speech_balloon: [http redirect - Static resources not loading on GitHub Pages | SO](https://stackoverflow.com/questions/18023908/static-resources-not-loading-on-github-pages)
+	- [GitHub Pages landing](https://pages.github.com/)
+	- [d9k.github.io | GH](https://github.com/d9k/d9k.github.io)
+	- https://d9k.github.io/
+	- [Quickstart for GitHub Pages - GitHub Docs](https://docs.github.com/en/pages/quickstart)
+
+### Chosing emulator
+
+- [ ] [gbajs2](https://github.com/andychase/gbajs2) by [andychase](https://github.com/andychase)
+	- :speech_balloon: [Autoloading a rom from a URL | issue #24 | gbajs2](https://github.com/andychase/gbajs2/issues/24)
+
+- [ ] [gba.ninja](https://github.com/simon-paris/gba.ninja) by [simon-paris](https://github.com/simon-paris)
+	- :rotating_light: CORS error
+
+
+
 ## :black_square_button: Save game
 
 - (and generated map)
@@ -157,6 +207,10 @@ while() {
 	- :speech_balloon: [c++ - Why is it illegal to take the address of an rvalue temporary? | SO](https://stackoverflow.com/questions/8763398/why-is-it-illegal-to-take-the-address-of-an-rvalue-temporary)
 	- :speech_balloon: [c++ - Taking the address of a temporary object | SO](https://stackoverflow.com/questions/2280688/taking-the-address-of-a-temporary-object/2281928#2281928)
 
+### C++ copy objects/strucrs
+
+- :newspaper: [Ways to copy struct in c/c++ | dev.to](https://dev.to/namantam1/ways-to-copy-struct-in-cc-3fl3)
+
 ### C++ links
 
 - :point_right: [[cpp-any|any / C++ / d9k-textbook]] [\[url\]](https://github.com/d9k/d9k-textbook/blob/master/cpp/cpp-any.md)
@@ -182,6 +236,12 @@ while() {
 - :speaking_head_in_silhouette: `exception handling disabled, use '-fexceptions' to enable` - Any stong reason for this? Many third-part c++ libraries use exceptions. / [2025.01.01](https://discord.com/channels/768759024270704641/831589248239009832/1323747184407216170)
 	- _Saves space and you can turn it back on. Exceptions are a much slower path than checking for conditions ahead of time and many you’ll encounter on an embedded system are not necessarily recoverable_ / Luigi
 	- The safe (and naive) way would be compiling third-party libraries seperately with exceptions enabled, while compiling your code with exceptions disabled (edited). And link them afterwards. This way, if exceptions are passed to the user code side, `std::terminate()` should be called, which at least shows abort error screen on Butano / [yeon](https://discord.com/channels/768759024270704641/831589248239009832/1323879117644370061)
+
+### C++ memory fragmentation
+
+- :speech_balloon: [strange memory leak - C++ Forum](https://cplusplus.com/forum/general/27075/)
+	- While looking at the process memory, it sometimes grows and sometimes does not, inexplicably
+	- [EzwRko23](https://cplusplus.com/user/xorebxebx/): As your application runs for a long time, the heap gets fragmented - there are holes of free memory, but they are too small to allocate from and the allocator allocates from new, fresh memory pages. At some time the situation stabilizes. This is typical behaviour for programs running without compacting GC. There are 2 solutions for this: 1. try a different allocator (in Linux you can do this by LD_PRELOAD), e.g. Google's Hoard allocator. 2. write a dedicated, fine tuned allocator for some of your objects (but beware of hard to find bugs - such things are extremely difficult to debug). There is also a third solution: use a language with good compacting GC - for programs that are heavy on allocation of small objects this can be a huge performance win - much faster allocation, good memory locality, no fragmentation and almost 0-cost of deallocation.
 
 ### C++ arrays
 
