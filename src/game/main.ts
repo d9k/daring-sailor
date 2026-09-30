@@ -2,6 +2,7 @@ import { Boot } from './scenes/Boot';
 import { Game as MainGame } from './scenes/Game';
 import { AUTO, Game } from 'phaser';
 import { Preloader } from './scenes/Preloader';
+import { WorldMapGen } from './scenes/WorldMapGen';
 import { GAME_HEIGHT, GAME_WIDTH } from '@/game/const/main';
 
 //  Find out more information about the Game Config at:
@@ -21,6 +22,7 @@ const config: Phaser.Types.Core.GameConfig = {
     scene: [
         Boot,
         Preloader,
+        WorldMapGen,
         MainGame
     ],
     input: {

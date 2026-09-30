@@ -45,6 +45,7 @@ export class Preloader extends Scene
         //  For example, you can define global animations here, so we can use them in other scenes.
 
         //  Move to the Game scene.
-        this.scene.start('Game');
+        // this.scene.start('Game');
+        this.scene.start('WorldMapGen');
     }
 }
