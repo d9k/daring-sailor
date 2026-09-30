@@ -30,4 +30,8 @@ export class IslandXYtoBool {
     removeValue(coords: IntXY) {
         delete this.data[coords.toKey()];
     }
+
+    isEmpty(): boolean {
+        return Object.keys(this.data).length === 0;
+    }
 }
