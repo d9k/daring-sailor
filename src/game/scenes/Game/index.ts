@@ -23,6 +23,7 @@ import {
     LAYER_UI_DEPTH,
     UPDATE_UI_INTERVAL_MS,
 } from '@/game/scenes/Game/const';
+import { SCENE_GAME } from '@/game/scenes/const';
 // import { logPrefixFilename } from '@/helpers/vite';
 
 import { Scene } from 'phaser';
@@ -35,7 +36,7 @@ function formatFps(fps?: number) {
     return `FPS: ${fpsText}`;
 }
 
-export class Game extends Scene {
+export class GameScene extends Scene {
     camera: Phaser.Cameras.Scene2D.Camera;
     background: Phaser.GameObjects.Image;
     layerUI: Phaser.GameObjects.Layer;
@@ -59,7 +60,7 @@ export class Game extends Scene {
     gamepad?: Phaser.Input.Gamepad.Gamepad;
 
     constructor() {
-        super('Game');
+        super(SCENE_GAME);
     }
 
     preload() {

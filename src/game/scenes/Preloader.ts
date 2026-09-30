@@ -1,12 +1,13 @@
 import { GAME_HEIGHT_CENTER, GAME_WIDTH, GAME_WIDTH_CENTER } from '@/game/const/main';
 import { Scene } from 'phaser';
 import { logPrefixFilename } from '@/helpers/vite';
+import { SCENE_PRELOADER, SCENE_WORLD_MAP_GEN } from '@/game/scenes/const';
 
-export class Preloader extends Scene
+export class PreloaderScene extends Scene
 {
     constructor ()
     {
-        super('Preloader');
+        super(SCENE_PRELOADER);
     }
 
     init ()
@@ -45,7 +46,7 @@ export class Preloader extends Scene
         //  For example, you can define global animations here, so we can use them in other scenes.
 
         //  Move to the Game scene.
-        // this.scene.start('Game');
-        this.scene.start('WorldMapGen');
+        // this.scene.start(SCENE_GAME);
+        this.scene.start(SCENE_WORLD_MAP_GEN);
     }
 }

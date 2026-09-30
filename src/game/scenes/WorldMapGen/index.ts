@@ -1,5 +1,6 @@
 import { Scene } from 'phaser';
 import { GAME_HEIGHT, GAME_WIDTH } from '@/game/const/main';
+import { SCENE_WORLD_MAP_GEN } from '@/game/scenes/const';
 
 type CellColor = [number, number, number];
 
@@ -12,13 +13,13 @@ const WORLD_MAP_ZOOM = 2;
 const COLOR_WATER: CellColor = [0x33, 0x99, 0xff];
 const COLOR_GRASS: CellColor = [0x33, 0xff, 0x33];
 
-export class WorldMapGen extends Scene {
+export class WorldMapGenScene extends Scene {
     canvasTexture!: Phaser.Textures.CanvasTexture;
     redrawPlanned = false;
     counter = 0;
 
     constructor() {
-        super('WorldMapGen');
+        super(SCENE_WORLD_MAP_GEN);
     }
 
     create() {

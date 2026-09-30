@@ -1,7 +1,8 @@
 import { Scene, GameObjects } from 'phaser';
 import { FONT_SIZE_SMALL, GAME_HEIGHT_CENTER, GAME_TITLE, GAME_WIDTH_CENTER } from '~/const/main';
+import { SCENE_GAME, SCENE_MAIN_MENU } from '@/game/scenes/const';
 
-export class MainMenu extends Scene
+export class MainMenuScene extends Scene
 {
     background: GameObjects.Image;
     logo: GameObjects.Image;
@@ -10,7 +11,7 @@ export class MainMenu extends Scene
 
     constructor ()
     {
-        super('MainMenu');
+        super(SCENE_MAIN_MENU);
     }
 
     create ()
@@ -33,7 +34,7 @@ export class MainMenu extends Scene
 
         this.input.once('pointerdown', () => {
 
-            this.scene.start('Game');
+            this.scene.start(SCENE_GAME);
 
         });
     }

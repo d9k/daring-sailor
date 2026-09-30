@@ -1,7 +1,8 @@
 import { GAME_HEIGHT_CENTER, GAME_WIDTH_CENTER } from '@/game/const/main';
 import { Scene } from 'phaser';
+import { SCENE_GAME_OVER, SCENE_MAIN_MENU } from '@/game/scenes/const';
 
-export class GameOver extends Scene
+export class GameOverScene extends Scene
 {
     camera: Phaser.Cameras.Scene2D.Camera;
     background: Phaser.GameObjects.Image;
@@ -9,7 +10,7 @@ export class GameOver extends Scene
 
     constructor ()
     {
-        super('GameOver');
+        super(SCENE_GAME_OVER);
     }
 
     create ()
@@ -29,7 +30,7 @@ export class GameOver extends Scene
 
         this.input.once('pointerdown', () => {
 
-            this.scene.start('MainMenu');
+            this.scene.start(SCENE_MAIN_MENU);
 
         });
     }
