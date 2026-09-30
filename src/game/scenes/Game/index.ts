@@ -23,7 +23,7 @@ import {
     LAYER_UI_DEPTH,
     UPDATE_UI_INTERVAL_MS,
 } from '@/game/scenes/Game/const';
-import { logPrefixFilename } from '@/helpers/vite';
+// import { logPrefixFilename } from '@/helpers/vite';
 
 import { Scene } from 'phaser';
 
@@ -172,7 +172,7 @@ export class Game extends Scene {
         }
     }
 
-    update(currentTime: number, deltaMs: number): void {
+    update(_currentTime: number, deltaMs: number): void {
         this.moveDirectionVector = new Phaser.Math.Vector2(0, 0);
 
         // Horizontal movement (D/Right and A/Left)
