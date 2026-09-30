@@ -1,14 +1,17 @@
-import { Direction, DirectionEnum } from '@/game/world/Direction';
+import { ALL_DIRECTIONS, Direction, DirectionEnum } from '@/game/world/Direction';
 import { EnumCellType } from '@/game/world/EnumCellType';
 import { IntXY } from '@/game/world/IntXY';
 import { IntXYtoBool } from '@/game/world/IntXYtoBool';
+import { IslandXYtoBool } from '@/game/world/IslandXYtoBool';
+import { logPrefixFilename } from '@/helpers/vite';
 
 export type WorldMapFloodFillArgs = {
     cellCoords: IntXY;
-    islandCells: IntXYtoBool;
+    islandCells: IslandXYtoBool;
     borderCells: IntXYtoBool;
     preserveDirectionPercent: number;
     iterations: number;
+    fillWithCellType: EnumCellType;
 };
 
 export const WORLD_MAP_SIZE = 256;
@@ -17,6 +20,7 @@ const SCAN_CELLS_COUNT = 6;
 const STEPS_MIN = 4;
 const STEPS_RATIO_MIN = 0.1;
 const STEPS_RATIO_MAX = 0.4;
+const RANDOM_BORDER_CELL_MAX_ATTEMPTS_COUNT = 100;
 
 /**
  * Steps inside iterations
@@ -35,11 +39,11 @@ export class WorldMap {
         }
     }
 
-    getValue(coords: IntXY): EnumCellType {
+    getCellType(coords: IntXY): EnumCellType {
         return this.data[coords.y][coords.x];
     }
 
-    setValue(coords: IntXY, cellType: EnumCellType) {
+    setCellType(coords: IntXY, cellType: EnumCellType) {
         this.data[coords.y][coords.x] = cellType;
     }
 
@@ -49,6 +53,7 @@ export class WorldMap {
         borderCells,
         preserveDirectionPercent,
         iterations,
+        fillWithCellType,
     }: WorldMapFloodFillArgs) {
         if (this.isEmpty(islandCells)) {
             islandCells.setValue(cellCoords);
@@ -58,7 +63,10 @@ export class WorldMap {
         }
 
         for (let i = 0; i < iterations; i++) {
-            const currentGenerationCell = this.randomBorderCell(borderCells);
+            const currentGenerationCell = this.randomBorderCell(
+                islandCells,
+                borderCells
+            );
             if (!currentGenerationCell) {
                 break;
             }
@@ -70,10 +78,6 @@ export class WorldMap {
                 islandCells,
                 cell
             );
-            if (Object.keys(startDirections).length === 0) {
-                borderCells.setValue(currentGenerationCell, false);
-                continue;
-            }
 
             const generateSteps = this.calcGenerateStepsCount(startDirections);
 
@@ -102,15 +106,16 @@ export class WorldMap {
                 cell = cell.offset(offset.x, offset.y);
                 islandCells.setValue(cell);
                 borderCells.setValue(cell);
+                this.setCellType(cell, fillWithCellType);
                 previousDirection = direction;
             }
 
-            borderCells.setValue(currentGenerationCell, false);
+            borderCells.removeValue(currentGenerationCell);
         }
     }
 
     getRandomIntToDirection(
-        islandCells: IntXYtoBool,
+        islandCells: IslandXYtoBool,
         cell: IntXY
     ): { [index: number]: DirectionEnum } {
         const result: { [index: number]: DirectionEnum } = {};
@@ -122,7 +127,7 @@ export class WorldMap {
                     continue;
                 }
                 const neighbor = cell.offset(relativeX, relativeY);
-                if (islandCells.getValue(neighbor)) {
+                if (islandCells.getValue(neighbor, this)) {
                     continue;
                 }
                 if (relativeX !== 0) {
@@ -150,17 +155,43 @@ export class WorldMap {
         return Math.max(STEPS_MIN, Math.floor(Object.keys(directions).length * ratio));
     }
 
-    randomBorderCell(borderCells: IntXYtoBool): IntXY | undefined {
-        const keys = Object.keys(borderCells.data).filter(
-            (key) => borderCells.data[key]
-        );
-        if (keys.length === 0) {
-            return undefined;
+    randomBorderCell(
+        islandCells: IslandXYtoBool,
+        borderCells: IntXYtoBool
+    ): IntXY | undefined {
+        // TODO think about maxAttemptsCount
+        for (let attempt = 0; attempt < RANDOM_BORDER_CELL_MAX_ATTEMPTS_COUNT; attempt++) {
+            const keys = Object.keys(borderCells.data);
+            if (keys.length === 0) {
+                return undefined;
+            }
+
+            const key = keys[Math.floor(Math.random() * keys.length)];
+            const cell = IntXY.fromKey(key);
+
+            if (!borderCells.getValue(cell)) {
+                borderCells.removeValue(cell);
+                continue;
+            }
+
+            for (const directionEnum of ALL_DIRECTIONS) {
+                const offset = new Direction(directionEnum).toOffset();
+                const cellToCheck = cell.offset(offset.x, offset.y);
+                if (!islandCells.getValue(cellToCheck, this)) {
+                    return cell;
+                }
+            }
+
+            // borderCells.removeValue(cell);
         }
-        return IntXY.fromKey(keys[Math.floor(Math.random() * keys.length)]);
+
+        console.log(
+            `${logPrefixFilename(import.meta.url)}: randomBorderCell exceeded ${RANDOM_BORDER_CELL_MAX_ATTEMPTS_COUNT} attempts`
+        );
+        return undefined;
     }
 
-    isEmpty(cells: IntXYtoBool): boolean {
+    isEmpty(cells: IntXYtoBool | IslandXYtoBool): boolean {
         return Object.keys(cells.data).length === 0;
     }
 }

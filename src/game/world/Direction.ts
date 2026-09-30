@@ -7,6 +7,13 @@ export enum DirectionEnum {
     Down = 'Down',
 }
 
+export const ALL_DIRECTIONS: DirectionEnum[] = [
+    DirectionEnum.Up,
+    DirectionEnum.Right,
+    DirectionEnum.Left,
+    DirectionEnum.Down,
+];
+
 export class Direction {
     constructor(public data: DirectionEnum) {}
 

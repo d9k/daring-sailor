@@ -11,7 +11,11 @@ export class IntXYtoBool {
         this.data[coords.toKey()] = value;
     }
 
-    getValue(coords: IntXY): boolean {
+    getValue(coords: IntXY): boolean | undefined {
         return this.data[coords.toKey()];
+    }
+
+    removeValue(coords: IntXY) {
+        delete this.data[coords.toKey()];
     }
 }
