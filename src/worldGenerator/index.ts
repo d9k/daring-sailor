@@ -79,7 +79,9 @@ export class WorldGenerator {
                 }
 
                 const offset = direction.toOffset();
-                cell = cell.offset(offset.x, offset.y);
+                cell = this.worldMap.ensureCellCoords(
+                    cell.offset(offset.x, offset.y)
+                );
                 islandCells.setValue(cell);
                 borderCells.setValue(cell);
                 this.worldMap.setCellType(cell, fillWithCellType);
@@ -103,6 +105,9 @@ export class WorldGenerator {
                     continue;
                 }
                 const neighbor = cell.offset(relativeX, relativeY);
+                if (!this.worldMap.validateCellCoords(neighbor)) {
+                    continue;
+                }
                 if (islandCells.getValue(neighbor, this.worldMap)) {
                     continue;
                 }
@@ -153,6 +158,9 @@ export class WorldGenerator {
             for (const directionEnum of ALL_DIRECTIONS) {
                 const offset = new Direction(directionEnum).toOffset();
                 const cellToCheck = cell.offset(offset.x, offset.y);
+                if (!this.worldMap.validateCellCoords(cellToCheck)) {
+                    continue;
+                }
                 if (!islandCells.getValue(cellToCheck, this.worldMap)) {
                     return cell;
                 }

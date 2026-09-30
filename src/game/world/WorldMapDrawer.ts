@@ -1,5 +1,5 @@
 import { EnumCellType } from '@/game/world/EnumCellType';
-import { WORLD_MAP_SIZE, WorldMap } from '@/game/world/WorldMap';
+import { WorldMap } from '@/game/world/WorldMap';
 import { IntXY } from '@/game/world/IntXY';
 
 type CellColor = [number, number, number];
@@ -21,8 +21,8 @@ export class WorldMapDrawer {
     draw() {
         this.canvasTexture.clear();
 
-        for (let y = 0; y < WORLD_MAP_SIZE; y++) {
-            for (let x = 0; x < WORLD_MAP_SIZE; x++) {
+        for (let y = 0; y < this.worldMap.mapSize; y++) {
+            for (let x = 0; x < this.worldMap.mapSize; x++) {
                 const cellType = this.worldMap.getCellType(new IntXY(x, y));
                 this.canvasTexture.setPixel(x, y, ...CELL_TYPE_TO_COLOR[cellType]);
             }
