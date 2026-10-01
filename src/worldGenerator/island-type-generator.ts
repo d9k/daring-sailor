@@ -6,9 +6,9 @@ type TileTypeConfig = {
 };
 
 const TILE_TYPE_TO_Y_PERCENTS: { [cellType: number]: TileTypeConfig } = {
-    [EnumCellType.Snow]: { rangePercents: [0, 40], requiredCount: 1 },
-    [EnumCellType.Grass]: { rangePercents: [35, 70], requiredCount: 2 },
-    [EnumCellType.Sand]: { rangePercents: [65, 100], requiredCount: 1 },
+    [EnumCellType.Snow]: { rangePercents: [0, 40], requiredCount: 2 },
+    [EnumCellType.Grass]: { rangePercents: [35, 70], requiredCount: 4 },
+    [EnumCellType.Sand]: { rangePercents: [65, 100], requiredCount: 2 },
 };
 
 export class IslandTypeGenerator {

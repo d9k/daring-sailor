@@ -26,6 +26,7 @@ const STEPS_MIN = 4;
 const STEPS_RATIO_MIN = 0.1;
 const STEPS_RATIO_MAX = 0.4;
 const RANDOM_BORDER_CELL_MAX_ATTEMPTS_COUNT = 100;
+const GULF_CANDIDATES_CELLS_UPDATE_EVERY_GULF_GENERATIONS = 20;
 
 /**
  * Steps inside iterations
@@ -131,7 +132,7 @@ export class WorldGenerator {
             return;
         }
 
-        const gulfCandidateCells = this.getGulfCandidateCells(
+        let gulfCandidateCells = this.getGulfCandidateCells(
             islandCells,
             borderCells
         );
@@ -140,7 +141,29 @@ export class WorldGenerator {
             `__TEST__ 600: generateGulfs: gulfCandidateCells (${gulfCandidateCells.length}): ${gulfCandidateCells.map((cell) => cell.toKey()).join(', ')}`
         );
 
+        let generatedGulfsCount = 0;
+
         while (generateGulfsMaxCount > 0 && gulfCandidateCells.length > 0) {
+            if (
+                generatedGulfsCount > 0 &&
+                generatedGulfsCount %
+                    GULF_CANDIDATES_CELLS_UPDATE_EVERY_GULF_GENERATIONS ===
+                0
+            ) {
+                gulfCandidateCells = this.getGulfCandidateCells(
+                    islandCells,
+                    borderCells
+                );
+
+                console.log(
+                    `__TEST__ 610: generateGulfs: updated gulfCandidateCells (${gulfCandidateCells.length}): ${gulfCandidateCells.map((cell) => cell.toKey()).join(', ')}`
+                );
+
+                if (gulfCandidateCells.length === 0) {
+                    break;
+                }
+            }
+
             const candidateIndex = Math.floor(Math.random() * gulfCandidateCells.length);
             const gulfCandidateCell = gulfCandidateCells.splice(candidateIndex, 1)[0];
 
@@ -154,6 +177,7 @@ export class WorldGenerator {
                 `__TEST__ 620: generateGulfs: gulf generated at ${gulfCandidateCell.toKey()}`
             );
 
+            generatedGulfsCount++;
             generateGulfsMaxCount--;
         }
     }
