@@ -5,8 +5,11 @@
 ## See also
 
 - [vibecoding log](./vibecoding-log.md)
-- [tasks](./doc/ds-tasks.md)
-- [done tasks](./doc/ds-done-tasks.md)
+
+<!--
+- [tasks (GBA C++, outdated)](./doc/ds-tasks-cpp.outdated.md)
+- [done tasks (GBA C++, outdated)](./doc/ds-done-tasks-cpp.outdated.md)
+-->
 
 ## Description
 

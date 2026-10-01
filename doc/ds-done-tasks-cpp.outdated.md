@@ -1,4 +1,6 @@
-# Daring sailor: tasks: done
+# Daring sailor: GBA C++: tasks: done
+
+- /!\ GBA C++ dev frozen, switched to PhaserJS
 
 ## See also
 
