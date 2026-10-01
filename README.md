@@ -1,6 +1,6 @@
 # Daring sailor
 
-- Project stage: map generator
+- Project stage: map generator, nothing else yet
 
 ## See also
 
