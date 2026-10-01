@@ -1,4 +1,4 @@
-# Vibecoding log
+# Daring Sailor: vibecoding log
 
 ## World Map Generator, 2026.09.30
 

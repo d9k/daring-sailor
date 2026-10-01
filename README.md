@@ -4,7 +4,7 @@
 
 ## See also
 
-- [vibecoding log](./doc/vibecoding-log.md)
+- [vibecoding log](./doc/ds-vibecoding-log.md)
 
 <!--
 - [tasks (GBA C++, outdated)](./doc/ds-tasks-cpp.outdated.md)
