@@ -29,7 +29,7 @@ export class WorldGenScene extends Scene {
         super(SCENE_WORLD_MAP_GEN);
     }
 
-    async create() {
+    create() {
         this.worldMap = new WorldMap();
 
         const worldGenerator = new WorldGenerator(this.worldMap);
@@ -69,14 +69,18 @@ export class WorldGenScene extends Scene {
         });
     }
 
-    async generateIslands(worldGenerator: WorldGenerator) {
+    generateIslands(worldGenerator: WorldGenerator) {
         const islandTypeGenerator = new IslandTypeGenerator(
             this.worldMap.mapSize
         );
 
         let islandsGenerated = 0;
 
-        while (!islandTypeGenerator.isRequiredCountsSatisfied()) {
+        const generateNextIsland = () => {
+            if (islandTypeGenerator.isRequiredCountsSatisfied()) {
+                return;
+            }
+
             if (islandsGenerated >= ISLANDS_COUNT_MAX) {
                 throw new Error(
                     `${logPrefixFilename(import.meta.url)}: generateIslands exceeded ${ISLANDS_COUNT_MAX} attempts, islandTypeToCount: ${JSON.stringify(islandTypeGenerator.islandTypeToCount)}`
@@ -105,14 +109,13 @@ export class WorldGenScene extends Scene {
 
             islandsGenerated++;
 
-            await this.sleep(0);
-        }
-    }
+            this.redrawPlanned = true;
 
-    sleep(ms: number): Promise<void> {
-        return new Promise((resolve) => {
-            this.time.delayedCall(ms, () => resolve());
-        });
+            // Перенос следующего острова в макротаск разблокирует поток
+            setTimeout(generateNextIsland, 0);
+        };
+
+        generateNextIsland();
     }
 
     update() {

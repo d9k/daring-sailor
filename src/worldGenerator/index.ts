@@ -169,7 +169,7 @@ export class WorldGenerator {
             // borderCells.removeValue(cell);
         }
 
-        console.log(
+        console.error(
             `${logPrefixFilename(import.meta.url)}: randomBorderCell exceeded ${RANDOM_BORDER_CELL_MAX_ATTEMPTS_COUNT} attempts`
         );
         return undefined;
