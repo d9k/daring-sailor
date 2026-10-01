@@ -245,4 +245,45 @@ src/game/scenes/WorldGen/index.ts:108-115
 
 здесь передавай генерацию проливов 1-10
 
-напиши helpers/random.ts с randomIntInRange(minIncluding, maxIncluding)
+напиши helpers/random.ts с `randomIntInRange(minIncluding, maxIncluding)`
+
+Добавь ещё `REGENERATE_GULF_CANDIDATES_CELLS_EVERY_GULF_GENERATIONS = 20`.
+
+### Generate great gulfs
+
+Теперь напиши `WorldGenerator.generateGreatGulfs({ xCount = 3, yCount = 3, maxOffset = 16, maxWidth = 3 })`
+
+Сначала по горизонтали, потом по вертикали генерируем.
+
+Пример генерации по горизонтали великих проливов: WORLD_MAP_CELLS_SIZE делим на `xCount`, получаем `greatGulfDefaultGap`.
+
+На каждом шаге for вычисляем `startingPoint`, прибавляем смещение `greatGulfDefaultGap` и delta такое, что `[-maxOffset; maxOffset]`. На первом шаге `[0; maxOffset]`, на последнем `[-maxOffset; 0]`.
+
+Применяем `ensureCellCoords` на `startingPoint`.
+
+Далее `offsetProbability = maxOffset / mapSize`
+
+Далее в цикле по другой оси координат сдвигаем на 1, а по нашей оси (горизонтали) сдвигаем с вероятностью `offsetProbability / 2` в сторону уменьшения, и с вероятностью `offsetProbabilty / 2` в другую.
+
+Далее вычисляем `currentGulfWidth`, прибавляем к текущей ширине (на старте 1) с вероятностью `GULF_WIDTH_CHANGE_PROBABILITY / 2` или убавляем с вероятностью `GULF_WIDTH_CHANGE_PROBABILITY / 2`. Но ширина должна оставаться в диапазоне `[1; maxWidth]`.
+
+Просто последовательно слева направо от текущей заполняем клетки длительностью в ширину. Причём, если был сдвиг по другой оси координат, в месте предыдущего тоже выводим воду (временное утолщение на изгибе).
+
+Перед выводом проверяем `ensureCellCoords` на каждом шаге.
+
+нужно этот кусок в async thisgenerateWorld(worldGenerator) пихнуть, и внутри сделать await this.generateIslands(worldGenerator):
+
+src/game/scenes/WorldGen/index.ts:60-65
+```
+        this.generateIslands(worldGenerator);
+
+        this.redrawWorldMapRequired = true;
+
+        worldGenerator.generateGreatGulfs();
+```
+
+Получилось так, что в `WorldMap.setCellType` приходят `[0, 113.8]`
+
+Проверь `WorldGenerator.generateGreatGulfs`, где могло получиться дробное число в координатах.
+
+> 🤖 Qwen Flash: Found the cause! You changed the default value to maxOffset = WORLD_MAP_CELLS_SIZE / 5 (src/worldGenerator/index.ts:197). In the case of a non-default mapSize (256/5 = 51.2 — becomes a decimal), randomIntInRange(deltaMin, deltaMax) with decimal bounds returns a decimal delta (for example 0 + 51.2 * random), which then gets added to the coordinates of startingPoint, and as a result you end up with values like [0, 113.8].

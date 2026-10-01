@@ -1,13 +1,13 @@
 import { EnumCellType } from '@/game/world/EnumCellType';
 import { IntXY } from '@/game/world/IntXY';
 
-export const WORLD_MAP_SIZE = 256;
+export const WORLD_MAP_CELLS_SIZE = 256;
 
 export class WorldMap {
     data: EnumCellType[][] = [];
     mapSize: number;
 
-    constructor(mapSize: number = WORLD_MAP_SIZE) {
+    constructor(mapSize: number = WORLD_MAP_CELLS_SIZE) {
         this.mapSize = mapSize;
         this.reset();
     }

@@ -2,9 +2,10 @@ import { EnumCellType } from '@/game/world/EnumCellType';
 import { IntXY } from '@/game/world/IntXY';
 import { IntXYtoBool } from '@/game/world/IntXYtoBool';
 import { IslandXYtoBool } from '@/game/world/IslandXYtoBool';
-import { WorldMap } from '@/game/world/WorldMap';
+import { WORLD_MAP_CELLS_SIZE, WorldMap } from '@/game/world/WorldMap';
 import { ALL_DIRECTIONS, Direction, DirectionEnum } from '@/game/world/Direction';
 import { logPrefixFilename } from '@/helpers/vite';
+import { randomIntInRange } from '@/helpers/random';
 
 export type WorldMapFloodFillArgs = {
     cellCoords: IntXY;
@@ -14,6 +15,13 @@ export type WorldMapFloodFillArgs = {
     iterations: number;
     fillWithCellType: EnumCellType;
     generateGulfsMaxCount?: number;
+};
+
+export type WorldMapGenerateGreatGulfsArgs = {
+    xCount?: number;
+    yCount?: number;
+    maxOffset?: number;
+    maxWidth?: number;
 };
 
 export enum GulfCandidateNeighborTypeEnum {
@@ -27,6 +35,7 @@ const STEPS_RATIO_MIN = 0.1;
 const STEPS_RATIO_MAX = 0.4;
 const RANDOM_BORDER_CELL_MAX_ATTEMPTS_COUNT = 100;
 const GULF_CANDIDATES_CELLS_UPDATE_EVERY_GULF_GENERATIONS = 20;
+const GULF_WIDTH_CHANGE_PROBABILITY = 0.3;
 
 /**
  * Steps inside iterations
@@ -179,6 +188,86 @@ export class WorldGenerator {
 
             generatedGulfsCount++;
             generateGulfsMaxCount--;
+        }
+    }
+
+    generateGreatGulfs({
+        xCount = 2,
+        yCount = 3,
+        maxOffset = Math.floor(WORLD_MAP_CELLS_SIZE / 3),
+        maxWidth = 12,
+    }: WorldMapGenerateGreatGulfsArgs = {}) {
+        const mapSize = this.worldMap.mapSize;
+        const offsetProbability = maxOffset / mapSize;
+
+        for (const isHorizontal of [true, false]) {
+            const gulfCount = isHorizontal ? xCount : yCount;
+            const greatGulfDefaultGap = Math.floor(mapSize / gulfCount);
+
+            for (let i = 0; i < gulfCount; i++) {
+                let deltaMin = -maxOffset;
+                let deltaMax = maxOffset;
+                if (i === 0) {
+                    deltaMin = 0;
+                }
+                if (i === gulfCount - 1) {
+                    deltaMax = 0;
+                }
+                const delta = randomIntInRange(deltaMin, deltaMax);
+
+                let startingPoint = isHorizontal
+                    ? new IntXY(i * greatGulfDefaultGap + delta, 0)
+                    : new IntXY(0, i * greatGulfDefaultGap + delta);
+
+                startingPoint = this.worldMap.ensureCellCoords(startingPoint);
+
+                console.log(
+                    `__TEST__ 700: generateGreatGulfs: ${isHorizontal ? 'horizontal' : 'vertical'} gulf ${i}/${gulfCount}, startingPoint: ${startingPoint.toKey()}`
+                );
+
+                let cell = startingPoint;
+                let previousAxisValue = isHorizontal ? cell.x : cell.y;
+                let currentGulfWidth = 1;
+
+                for (let step = 0; step < mapSize; step++) {
+                    const roll = Math.random();
+                    let axisDelta = 0;
+                    if (roll < offsetProbability / 2) {
+                        axisDelta = -1;
+                    } else if (roll < offsetProbability) {
+                        axisDelta = 1;
+                    }
+
+                    if (Math.random() < GULF_WIDTH_CHANGE_PROBABILITY / 2) {
+                        currentGulfWidth = Math.min(
+                            maxWidth,
+                            currentGulfWidth + 1
+                        );
+                    } else if (
+                        Math.random() < GULF_WIDTH_CHANGE_PROBABILITY / 2
+                    ) {
+                        currentGulfWidth = Math.max(1, currentGulfWidth - 1);
+                    }
+
+                    const currentAxisValue = isHorizontal ? cell.x : cell.y;
+
+                    const fillStart = Math.min(previousAxisValue, currentAxisValue);
+                    const fillEnd = Math.max(previousAxisValue, currentAxisValue) + currentGulfWidth - 1;
+
+                    for (let f = fillStart; f <= fillEnd; f++) {
+                        const fillCell = this.worldMap.ensureCellCoords(
+                            isHorizontal ? new IntXY(f, cell.y) : new IntXY(cell.x, f)
+                        );
+                        this.worldMap.setCellType(fillCell, EnumCellType.Water);
+                    }
+
+                    previousAxisValue = currentAxisValue;
+
+                    cell = this.worldMap.ensureCellCoords(
+                        isHorizontal ? cell.offset(axisDelta, 1) : cell.offset(1, axisDelta)
+                    );
+                }
+            }
         }
     }
 

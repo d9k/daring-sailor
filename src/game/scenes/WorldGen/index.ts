@@ -47,9 +47,6 @@ export class WorldGenScene extends Scene {
             this.canvasTexture
         );
 
-        /** async generate */
-        this.generateIslands(worldGenerator);
-
         this.add
             .image(
                 DRAW_MAP_POSITION_X,
@@ -60,7 +57,8 @@ export class WorldGenScene extends Scene {
             .setScale(WORLD_MAP_ZOOM);
 
 
-        this.redraw();
+        /** async generate */
+        this.generateWorld(worldGenerator);
 
         // this.time.addEvent({
         //     delay: REDRAW_INTERVAL_MS,
@@ -71,64 +69,77 @@ export class WorldGenScene extends Scene {
         // });
     }
 
-    generateIslands(worldGenerator: WorldGenerator) {
-        const islandTypeGenerator = new IslandTypeGenerator(
-            this.worldMap.mapSize
-        );
+    async generateWorld(worldGenerator: WorldGenerator) {
+        await this.generateIslands(worldGenerator);
 
-        let islandsGenerated = 0;
+        this.redrawWorldMapRequired = true;
 
-        const generateNextIsland = () => {
-            console.log(
-                `__TEST__ 100: generateIslands: next island, islandsGenerated: ${islandsGenerated}, islandTypeToCount: ${JSON.stringify(islandTypeGenerator.islandTypeToCount)}`
+        worldGenerator.generateGreatGulfs();
+
+        this.redrawWorldMapRequired = true;
+    }
+
+    generateIslands(worldGenerator: WorldGenerator): Promise<void> {
+        return new Promise((resolve) => {
+            const islandTypeGenerator = new IslandTypeGenerator(
+                this.worldMap.mapSize
             );
 
-            if (islandsGenerated >= ISLANDS_COUNT_MIN && islandTypeGenerator.isRequiredCountsSatisfied()) {
+            let islandsGenerated = 0;
+
+            const generateNextIsland = () => {
                 console.log(
-                    `__TEST__ 190: generateIslands: required counts satisfied, done`
+                    `__TEST__ 100: generateIslands: next island, islandsGenerated: ${islandsGenerated}, islandTypeToCount: ${JSON.stringify(islandTypeGenerator.islandTypeToCount)}`
                 );
-                return;
-            }
 
-            if (islandsGenerated >= ISLANDS_COUNT_MAX) {
-                throw new Error(
-                    `${logPrefixFilename(import.meta.url)}: generateIslands exceeded ${ISLANDS_COUNT_MAX} attempts, islandTypeToCount: ${JSON.stringify(islandTypeGenerator.islandTypeToCount)}`
+                if (islandsGenerated >= ISLANDS_COUNT_MIN && islandTypeGenerator.isRequiredCountsSatisfied()) {
+                    console.log(
+                        `__TEST__ 190: generateIslands: required counts satisfied, done`
+                    );
+                    resolve();
+                    return;
+                }
+
+                if (islandsGenerated >= ISLANDS_COUNT_MAX) {
+                    throw new Error(
+                        `${logPrefixFilename(import.meta.url)}: generateIslands exceeded ${ISLANDS_COUNT_MAX} attempts, islandTypeToCount: ${JSON.stringify(islandTypeGenerator.islandTypeToCount)}`
+                    );
+                }
+
+                if (islandsGenerated >= ISLANDS_COUNT_MIN) {
+                    islandTypeGenerator.minIslandsGenerated = true;
+                }
+
+                const cellCoords = new IntXY(
+                    Math.floor(Math.random() * this.worldMap.mapSize),
+                    Math.floor(Math.random() * this.worldMap.mapSize)
                 );
-            }
+                const fillWithCellType =
+                    islandTypeGenerator.randomIslandCellType(cellCoords.y);
 
-            if (islandsGenerated >= ISLANDS_COUNT_MIN) {
-                islandTypeGenerator.minIslandsGenerated = true;
-            }
+                worldGenerator.floodFillFromCell({
+                    cellCoords,
+                    islandCells: new IslandXYtoBool(fillWithCellType),
+                    borderCells: new IntXYtoBool(),
+                    preserveDirectionPercent: ISLAND_PRESERVE_DIRECTION_PERCENT,
+                    iterations: ISLAND_ITERATIONS,
+                    fillWithCellType,
+                    generateGulfsMaxCount: randomIntInRange(
+                        GULFS_MAX_COUNT_MIN,
+                        GULFS_MAX_COUNT_MAX
+                    ),
+                });
 
-            const cellCoords = new IntXY(
-                Math.floor(Math.random() * this.worldMap.mapSize),
-                Math.floor(Math.random() * this.worldMap.mapSize)
-            );
-            const fillWithCellType =
-                islandTypeGenerator.randomIslandCellType(cellCoords.y);
+                islandsGenerated++;
 
-            worldGenerator.floodFillFromCell({
-                cellCoords,
-                islandCells: new IslandXYtoBool(fillWithCellType),
-                borderCells: new IntXYtoBool(),
-                preserveDirectionPercent: ISLAND_PRESERVE_DIRECTION_PERCENT,
-                iterations: ISLAND_ITERATIONS,
-                fillWithCellType,
-                generateGulfsMaxCount: randomIntInRange(
-                    GULFS_MAX_COUNT_MIN,
-                    GULFS_MAX_COUNT_MAX
-                ),
-            });
+                this.redrawWorldMapRequired = true;
 
-            islandsGenerated++;
+                // Перенос следующего острова в макротаск разблокирует поток
+                setTimeout(generateNextIsland, 0);
+            };
 
-            this.redrawWorldMapRequired = true;
-
-            // Перенос следующего острова в макротаск разблокирует поток
-            setTimeout(generateNextIsland, 0);
-        };
-
-        generateNextIsland();
+            generateNextIsland();
+        });
     }
 
     update() {
