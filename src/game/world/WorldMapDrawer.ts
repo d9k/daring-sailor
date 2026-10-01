@@ -9,6 +9,7 @@ const COLOR_GRASS: CellColor = [0x33, 0xff, 0x33];
 const COLOR_FOREST: CellColor = [0x0a, 0x6b, 0x1f];
 const COLOR_SNOW: CellColor = [0xff, 0xff, 0xff];
 const COLOR_SAND: CellColor = [0xff, 0xe1, 0x33];
+const COLOR_DEBUG: CellColor = [0xff, 0x69, 0xb4];
 
 const CELL_TYPE_TO_COLOR: { [cellType: number]: CellColor } = {
     [EnumCellType.Water]: COLOR_WATER,
@@ -16,6 +17,7 @@ const CELL_TYPE_TO_COLOR: { [cellType: number]: CellColor } = {
     [EnumCellType.Forest]: COLOR_FOREST,
     [EnumCellType.Snow]: COLOR_SNOW,
     [EnumCellType.Sand]: COLOR_SAND,
+    [EnumCellType.Debug]: COLOR_DEBUG,
 };
 
 export class WorldMapDrawer {

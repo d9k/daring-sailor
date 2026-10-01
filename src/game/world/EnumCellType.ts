@@ -4,4 +4,5 @@ export enum EnumCellType {
     Forest,
     Snow,
     Sand,
+    Debug = 255,
 }

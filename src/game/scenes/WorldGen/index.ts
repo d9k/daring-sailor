@@ -8,9 +8,9 @@ import { SCENE_WORLD_MAP_GEN } from '@/game/scenes/const';
 import { WorldGenerator } from '@/worldGenerator';
 import { IslandTypeGenerator } from '@/worldGenerator/island-type-generator';
 import { logPrefixFilename } from '@/helpers/vite';
+import { randomIntInRange } from '@/helpers/random';
 
 export const WORLD_MAP_TEXTURE_KEY = 'worldMapTexture';
-// const REDRAW_INTERVAL_MS = 333;
 const WORLD_MAP_ZOOM = 1;
 const DRAW_MAP_POSITION_X = 60;
 const DRAW_MAP_POSITION_Y = 30;
@@ -18,6 +18,8 @@ const ISLANDS_COUNT_MIN = 12;
 const ISLANDS_COUNT_MAX = 100;
 const ISLAND_ITERATIONS = 100;
 const ISLAND_PRESERVE_DIRECTION_PERCENT = 10;
+const GULFS_MAX_COUNT_MIN = 10;
+const GULFS_MAX_COUNT_MAX = 100;
 
 export class WorldGenScene extends Scene {
     canvasTexture!: Phaser.Textures.CanvasTexture;
@@ -112,6 +114,10 @@ export class WorldGenScene extends Scene {
                 preserveDirectionPercent: ISLAND_PRESERVE_DIRECTION_PERCENT,
                 iterations: ISLAND_ITERATIONS,
                 fillWithCellType,
+                generateGulfsMaxCount: randomIntInRange(
+                    GULFS_MAX_COUNT_MIN,
+                    GULFS_MAX_COUNT_MAX
+                ),
             });
 
             islandsGenerated++;

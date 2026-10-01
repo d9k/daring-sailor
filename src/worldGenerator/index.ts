@@ -13,7 +13,13 @@ export type WorldMapFloodFillArgs = {
     preserveDirectionPercent: number;
     iterations: number;
     fillWithCellType: EnumCellType;
+    generateGulfsMaxCount?: number;
 };
+
+export enum GulfCandidateNeighborTypeEnum {
+    WATER = 'WATER',
+    ISLAND = 'ISLAND',
+}
 
 const SCAN_CELLS_COUNT = 6;
 const STEPS_MIN = 4;
@@ -34,6 +40,7 @@ export class WorldGenerator {
         preserveDirectionPercent,
         iterations,
         fillWithCellType,
+        generateGulfsMaxCount = 0,
     }: WorldMapFloodFillArgs) {
         // console.log(
         //     `__TEST__ 200: floodFillFromCell: entry cell ${cellCoords.toKey()}, fillWithCellType: ${fillWithCellType}`
@@ -111,6 +118,102 @@ export class WorldGenerator {
         // console.log(
         //     `__TEST__ 500: floodFillFromCell: done, islandCells: ${Object.keys(islandCells.data).length}`
         // );
+
+        this.generateGulfs(islandCells, borderCells, generateGulfsMaxCount);
+    }
+
+    generateGulfs(
+        islandCells: IslandXYtoBool,
+        borderCells: IntXYtoBool,
+        generateGulfsMaxCount: number
+    ) {
+        if (generateGulfsMaxCount <= 0) {
+            return;
+        }
+
+        const gulfCandidateCells = this.getGulfCandidateCells(
+            islandCells,
+            borderCells
+        );
+
+        console.log(
+            `__TEST__ 600: generateGulfs: gulfCandidateCells (${gulfCandidateCells.length}): ${gulfCandidateCells.map((cell) => cell.toKey()).join(', ')}`
+        );
+
+        while (generateGulfsMaxCount > 0 && gulfCandidateCells.length > 0) {
+            const candidateIndex = Math.floor(Math.random() * gulfCandidateCells.length);
+            const gulfCandidateCell = gulfCandidateCells.splice(candidateIndex, 1)[0];
+
+            islandCells.removeValue(gulfCandidateCell);
+            borderCells.removeValue(gulfCandidateCell);
+            // TODO revert to EnumCellType.Water after debug
+            this.worldMap.setCellType(gulfCandidateCell, EnumCellType.Debug);
+
+            console.log(
+                `__TEST__ 620: generateGulfs: gulf generated at ${gulfCandidateCell.toKey()}`
+            );
+
+            generateGulfsMaxCount--;
+        }
+    }
+
+    getGulfCandidateCells(
+        islandCells: IslandXYtoBool,
+        borderCells: IntXYtoBool
+    ): IntXY[] {
+        const gulfCandidateCells: IntXY[] = [];
+
+        const { Up, Down, Left, Right } = DirectionEnum;
+        const { WATER, ISLAND } = GulfCandidateNeighborTypeEnum;
+
+        for (const key of Object.keys(borderCells.data)) {
+            const cell = IntXY.fromKey(key);
+
+            const neighborTypeToDirection: {
+                [direction: string]:
+                    | GulfCandidateNeighborTypeEnum
+                    | undefined;
+            } = {};
+
+            for (const directionEnum of ALL_DIRECTIONS) {
+                const offset = new Direction(directionEnum).toOffset();
+                const neighbor = cell.offset(offset.x, offset.y);
+
+                neighborTypeToDirection[directionEnum] =
+                    this.getCandidateNeighborType(islandCells, neighbor);
+            }
+
+            const isHorizontalGulf =
+                neighborTypeToDirection[Left] === WATER &&
+                neighborTypeToDirection[Right] === WATER &&
+                neighborTypeToDirection[Up] === ISLAND &&
+                neighborTypeToDirection[Down] === ISLAND;
+
+            const isVerticalGulf =
+                neighborTypeToDirection[Up] === WATER &&
+                neighborTypeToDirection[Down] === WATER &&
+                neighborTypeToDirection[Left] === ISLAND &&
+                neighborTypeToDirection[Right] === ISLAND;
+
+            if (isHorizontalGulf || isVerticalGulf) {
+                gulfCandidateCells.push(cell);
+            }
+        }
+
+        return gulfCandidateCells;
+    }
+
+    getCandidateNeighborType(
+        islandCells: IslandXYtoBool,
+        neighbor: IntXY
+    ): GulfCandidateNeighborTypeEnum | undefined {
+        if (!this.worldMap.validateCellCoords(neighbor)) {
+            return undefined;
+        }
+
+        return islandCells.getValue(neighbor, this.worldMap)
+            ? GulfCandidateNeighborTypeEnum.ISLAND
+            : GulfCandidateNeighborTypeEnum.WATER;
     }
 
     getRandomIntToDirection(

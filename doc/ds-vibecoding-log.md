@@ -213,3 +213,36 @@ island generation stuck and `'requestAnimationFrame' handler took <N>ms`.
 Please add debug print with `__TEST__ 100/200/300` prefix in cycles
 
 100/200 - надо увеличивать для каждого сообщения, а если вклинивается новое, то 150, 175...
+
+### Generating gulfs
+
+Добавь в `type WorldMapFloodFillArgs` `generateGulfsMaxCount`.
+В конце `WorldGenerator.floodFillFromCell()` вычисли `gulfCandidateCells` пробегом по `borderCells` и по `ALL_DIRECTIONS` от них (проверяем соседей по `islandCells.getValue()`). Если по горизонтали 2 воды, а по вертикали 2 клетки острова, то это кандидат на пролив.
+
+Дальше итерируемся по `generateGulfsMaxCount` и делаем водой случайные клетки оттуда.
+
+Сделай лучше GulfCandidateNeighborTypeEnum = WATER | ISLAND  и вместо isWaterCell, isIslandCell нужно getCandidateNeighborType().
+
+Ты в условии проверял на горизонталь, надо ещё вертикаль проверить.
+
+не нравится isGulfCandidate. получилось длинно. сделай проще, как я написал, с пробегом по ALL_DIRECTIONS. Не выделяй лишних подфункций пока что.
+
+вот так короче и понятнее! выдели только getGulfCandidateCells()
+
+пока что добавь отладочное логирование gulfCandidateCells и после каждой генерации пролива его координаты
+
+src/game/scenes/WorldGen/index.ts:108-115
+```
+            worldGenerator.floodFillFromCell({
+                cellCoords,
+                islandCells: new IslandXYtoBool(fillWithCellType),
+                borderCells: new IntXYtoBool(),
+                preserveDirectionPercent: ISLAND_PRESERVE_DIRECTION_PERCENT,
+                iterations: ISLAND_ITERATIONS,
+                fillWithCellType,
+            });
+```
+
+здесь передавай генерацию проливов 1-10
+
+напиши helpers/random.ts с randomIntInRange(minIncluding, maxIncluding)
