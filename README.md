@@ -4,7 +4,7 @@
 
 ## See also
 
-- [vibecoding-log](./vibecoding-log.md)
+- [vibecoding log](./vibecoding-log.md)
 - [tasks](./doc/ds-tasks.md)
 - [done tasks](./doc/ds-done-tasks.md)
 
