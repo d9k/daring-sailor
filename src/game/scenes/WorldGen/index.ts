@@ -1,5 +1,4 @@
 import { Scene } from 'phaser';
-import { EnumCellType } from '@/game/world/EnumCellType';
 import { IntXY } from '@/game/world/IntXY';
 import { IntXYtoBool } from '@/game/world/IntXYtoBool';
 import { IslandXYtoBool } from '@/game/world/IslandXYtoBool';
@@ -7,20 +6,18 @@ import { WorldMap } from '@/game/world/WorldMap';
 import { WorldMapDrawer } from '@/game/world/WorldMapDrawer';
 import { SCENE_WORLD_MAP_GEN } from '@/game/scenes/const';
 import { WorldGenerator } from '@/worldGenerator';
+import { IslandTypeGenerator } from '@/worldGenerator/island-type-generator';
+import { logPrefixFilename } from '@/helpers/vite';
 
 export const WORLD_MAP_TEXTURE_KEY = 'worldMapTexture';
-const REDRAW_INTERVAL_MS = 1000;
+const REDRAW_INTERVAL_MS = 333;
 const WORLD_MAP_ZOOM = 1;
 const DRAW_MAP_POSITION_X = 60;
 const DRAW_MAP_POSITION_Y = 30;
-const ISLANDS_COUNT = 12;
+const ISLANDS_COUNT_MIN = 12;
+const ISLANDS_COUNT_MAX = 100;
 const ISLAND_ITERATIONS = 100;
 const ISLAND_PRESERVE_DIRECTION_PERCENT = 10;
-const TILE_TYPE_TO_Y_PERCENTS: { [cellType: number]: [number, number] } = {
-    [EnumCellType.Snow]: [0, 40],
-    [EnumCellType.Grass]: [35, 70],
-    [EnumCellType.Sand]: [65, 100],
-};
 
 export class WorldGenScene extends Scene {
     canvasTexture!: Phaser.Textures.CanvasTexture;
@@ -32,7 +29,7 @@ export class WorldGenScene extends Scene {
         super(SCENE_WORLD_MAP_GEN);
     }
 
-    create() {
+    async create() {
         this.worldMap = new WorldMap();
 
         const worldGenerator = new WorldGenerator(this.worldMap);
@@ -48,9 +45,8 @@ export class WorldGenScene extends Scene {
             this.canvasTexture
         );
 
+        /** async generate */
         this.generateIslands(worldGenerator);
-
-        this.redraw();
 
         this.add
             .image(
@@ -61,6 +57,9 @@ export class WorldGenScene extends Scene {
             .setOrigin(0, 0)
             .setScale(WORLD_MAP_ZOOM);
 
+
+        this.redraw();
+
         this.time.addEvent({
             delay: REDRAW_INTERVAL_MS,
             callback: () => {
@@ -70,13 +69,30 @@ export class WorldGenScene extends Scene {
         });
     }
 
-    generateIslands(worldGenerator: WorldGenerator) {
-        for (let i = 0; i < ISLANDS_COUNT; i++) {
+    async generateIslands(worldGenerator: WorldGenerator) {
+        const islandTypeGenerator = new IslandTypeGenerator(
+            this.worldMap.mapSize
+        );
+
+        let islandsGenerated = 0;
+
+        while (!islandTypeGenerator.isRequiredCountsSatisfied()) {
+            if (islandsGenerated >= ISLANDS_COUNT_MAX) {
+                throw new Error(
+                    `${logPrefixFilename(import.meta.url)}: generateIslands exceeded ${ISLANDS_COUNT_MAX} attempts, islandTypeToCount: ${JSON.stringify(islandTypeGenerator.islandTypeToCount)}`
+                );
+            }
+
+            if (islandsGenerated >= ISLANDS_COUNT_MIN) {
+                islandTypeGenerator.minIslandsGenerated = true;
+            }
+
             const cellCoords = new IntXY(
                 Math.floor(Math.random() * this.worldMap.mapSize),
                 Math.floor(Math.random() * this.worldMap.mapSize)
             );
-            const fillWithCellType = this.randomIslandCellType(cellCoords.y);
+            const fillWithCellType =
+                islandTypeGenerator.randomIslandCellType(cellCoords.y);
 
             worldGenerator.floodFillFromCell({
                 cellCoords,
@@ -86,24 +102,17 @@ export class WorldGenScene extends Scene {
                 iterations: ISLAND_ITERATIONS,
                 fillWithCellType,
             });
+
+            islandsGenerated++;
+
+            await this.sleep(0);
         }
     }
 
-    randomIslandCellType(y: number): EnumCellType {
-        const yPercent = (y / (this.worldMap.mapSize - 1)) * 100;
-
-        const tileTypeToCurrentY: EnumCellType[] = [];
-        for (const cellTypeKey in TILE_TYPE_TO_Y_PERCENTS) {
-            const [percentMin, percentMax] =
-                TILE_TYPE_TO_Y_PERCENTS[cellTypeKey];
-            if (yPercent >= percentMin && yPercent <= percentMax) {
-                tileTypeToCurrentY.push(Number(cellTypeKey));
-            }
-        }
-
-        return tileTypeToCurrentY[
-            Math.floor(Math.random() * tileTypeToCurrentY.length)
-        ];
+    sleep(ms: number): Promise<void> {
+        return new Promise((resolve) => {
+            this.time.delayedCall(ms, () => resolve());
+        });
     }
 
     update() {

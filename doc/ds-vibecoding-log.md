@@ -189,3 +189,17 @@ src/game/world/WorldMap.ts
 Слушай, ну пока пусть будут grass-острова, без forest.
 
 PERCENT_MAX не нужен, все знают, что 100% - максимально
+
+### Required count
+
+В TILE_TYPE_TO_Y_PERCENTS помимо rangePercents должен включать теперь ещё requiredCount.
+
+Заведи `IslandTypeGenerator` в `worldGenerator/island-type-generator`. Перемести туда `(method) WorldGenScene.randomIslandCellType(y: number): EnumCellType` и `TILE_TYPE_TO_Y_PERCENTS`. `IslandTypeGenerator` должен вести подсчёт `islandTypeToCount`.
+
+`(method) WorldGenScene.generateIslands(worldGenerator: WorldGenerator): void` - Переименуй ISLANDS_COUNT на ISLANDS_COUNT_MIN. Вместо for while. ISLANDS_COUNT_MAX=100 - при превышении падай с ошибкой, как в `src/worldGenerator/index.ts` используется `logPrefixFilename`.
+
+Когда сгенерировано `ISLANDS_COUNT_MIN`, мы ставим флаг `islandTypeGenerator.minIslandsGenerated`. И `randomIslandCellType()` теперь фильтрует `fileTypeToCurrentY` с помощью  `getFilteredfileTypeToCurrentY()` в зависимости от того, насколько `islandTypeToCount` удовлетворяет requiredCount.
+
+islandTypeGenerator должен быть не членом класса, а только внутри generateIslands(). давай, кстати, generateIslands() асинхронно вызывать
+
+ну какой await, асинхронно ж
