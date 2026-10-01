@@ -167,3 +167,25 @@ src/worldGenerator/index.ts с помощью Math.min, Math.max запрети 
 
 src/game/world/WorldMap.ts
 добавь validateCellCoords() лучше
+
+## Island generator improvements: new tile types, 2026.10.01
+
+```
+(method) worldgenscene.generateislands(worldgenerator: worldgenerator): void
+```
+
+нужно добавить snow, sand острова.
+
+`tile_type_to_y_percents = { snow: [0, 40], forest: [35, 70], sand: [65, 100]}`
+
+сначала нужно преобразовать сгенерированную координату в `y_percent` - процент от максимальной.
+
+дальше пробежаться по `tile_to_y_percents` и создать список `tiletypetocurrenty` - какие попадают в диапазон.
+
+а дальше просто выбать тип тайла по случайному индексу `tiletypetocurrenty`.
+
+дальше доработай src/game/world/worldmapdrawer.ts, добавь яркие цвета для тайлов новых типов.
+
+Слушай, ну пока пусть будут grass-острова, без forest.
+
+PERCENT_MAX не нужен, все знают, что 100% - максимально

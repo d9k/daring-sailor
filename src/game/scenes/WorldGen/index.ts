@@ -16,6 +16,11 @@ const DRAW_MAP_POSITION_Y = 30;
 const ISLANDS_COUNT = 12;
 const ISLAND_ITERATIONS = 100;
 const ISLAND_PRESERVE_DIRECTION_PERCENT = 10;
+const TILE_TYPE_TO_Y_PERCENTS: { [cellType: number]: [number, number] } = {
+    [EnumCellType.Snow]: [0, 40],
+    [EnumCellType.Grass]: [35, 70],
+    [EnumCellType.Sand]: [65, 100],
+};
 
 export class WorldGenScene extends Scene {
     canvasTexture!: Phaser.Textures.CanvasTexture;
@@ -67,18 +72,38 @@ export class WorldGenScene extends Scene {
 
     generateIslands(worldGenerator: WorldGenerator) {
         for (let i = 0; i < ISLANDS_COUNT; i++) {
+            const cellCoords = new IntXY(
+                Math.floor(Math.random() * this.worldMap.mapSize),
+                Math.floor(Math.random() * this.worldMap.mapSize)
+            );
+            const fillWithCellType = this.randomIslandCellType(cellCoords.y);
+
             worldGenerator.floodFillFromCell({
-                cellCoords: new IntXY(
-                    Math.floor(Math.random() * this.worldMap.mapSize),
-                    Math.floor(Math.random() * this.worldMap.mapSize)
-                ),
-                islandCells: new IslandXYtoBool(EnumCellType.Grass),
+                cellCoords,
+                islandCells: new IslandXYtoBool(fillWithCellType),
                 borderCells: new IntXYtoBool(),
                 preserveDirectionPercent: ISLAND_PRESERVE_DIRECTION_PERCENT,
                 iterations: ISLAND_ITERATIONS,
-                fillWithCellType: EnumCellType.Grass,
+                fillWithCellType,
             });
         }
+    }
+
+    randomIslandCellType(y: number): EnumCellType {
+        const yPercent = (y / (this.worldMap.mapSize - 1)) * 100;
+
+        const tileTypeToCurrentY: EnumCellType[] = [];
+        for (const cellTypeKey in TILE_TYPE_TO_Y_PERCENTS) {
+            const [percentMin, percentMax] =
+                TILE_TYPE_TO_Y_PERCENTS[cellTypeKey];
+            if (yPercent >= percentMin && yPercent <= percentMax) {
+                tileTypeToCurrentY.push(Number(cellTypeKey));
+            }
+        }
+
+        return tileTypeToCurrentY[
+            Math.floor(Math.random() * tileTypeToCurrentY.length)
+        ];
     }
 
     update() {
