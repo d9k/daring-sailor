@@ -22,7 +22,6 @@ export class WorldGenScene extends Scene {
     worldMap!: WorldMap;
     worldMapDrawer!: WorldMapDrawer;
     redrawPlanned = false;
-    // counter = 0;
 
     constructor() {
         super(SCENE_WORLD_MAP_GEN);
@@ -85,18 +84,6 @@ export class WorldGenScene extends Scene {
     update() {
         if (this.redrawPlanned) {
             this.redrawPlanned = false;
-
-            // DEBUG
-            // this.worldMap.setCellType(
-            //     new IntXY(this.counter, 0),
-            //     EnumCellType.Water
-            // );
-            // this.worldMap.setCellType(
-            //     new IntXY(this.counter + 1, 0),
-            //     EnumCellType.Grass
-            // );
-
-            // this.counter = (this.counter + 1) % (WORLD_MAP_SIZE - 1);
 
             this.redraw();
         }
