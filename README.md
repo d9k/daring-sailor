@@ -1,6 +1,6 @@
 # Daring sailor
 
-- Project stage: planning, [following GBA tutorials](https://github.com/d9k/d9k-gamedev-examples/tree/main/gba/cpp-butano)
+- Project stage: map generator
 
 ## See also
 
@@ -41,6 +41,7 @@ Game about sailor merchant.
 		- different abilities
 - [ ] collectables
 - [ ] possessions: cart, ship
+- [ ] ship have another crew member. At the shore you can light a fire to call a ship
 
 ## Map
 
@@ -117,6 +118,20 @@ Game about sailor merchant.
 	- `= 100 * 8 / 1024 = < 1 kb`
 	- timing is frame number. Button is multiplier
 
+## Biomes
+
+- Desert
+- Snow
+- Forest
+
+## Skills
+
+- Finding plants
+- Finding mushrooms
+- Detect mushroom
+- Detect plant
+-
+
 # Techical info
 
 (copied from https://github.com/d9k/d9k-gamedev-examples/tree/main/phaser-js/phaser-3-png-animation)
@@ -141,7 +156,7 @@ This is a Phaser 3 project template that uses Vite for bundling. It supports hot
 
 **[This Template is also available as a JavaScript version.](https://github.com/phaserjs/template-vite)**
 
-### Versions
+## Versions
 
 This template has been updated for:
 
