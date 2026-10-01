@@ -146,8 +146,9 @@ export class WorldGenerator {
 
             islandCells.removeValue(gulfCandidateCell);
             borderCells.removeValue(gulfCandidateCell);
-            // TODO revert to EnumCellType.Water after debug
-            this.worldMap.setCellType(gulfCandidateCell, EnumCellType.Debug);
+
+            // this.worldMap.setCellType(gulfCandidateCell, EnumCellType.Debug);
+            this.worldMap.setCellType(gulfCandidateCell, EnumCellType.Water);
 
             console.log(
                 `__TEST__ 620: generateGulfs: gulf generated at ${gulfCandidateCell.toKey()}`

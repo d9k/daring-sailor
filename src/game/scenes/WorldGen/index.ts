@@ -18,8 +18,8 @@ const ISLANDS_COUNT_MIN = 12;
 const ISLANDS_COUNT_MAX = 100;
 const ISLAND_ITERATIONS = 100;
 const ISLAND_PRESERVE_DIRECTION_PERCENT = 10;
-const GULFS_MAX_COUNT_MIN = 10;
-const GULFS_MAX_COUNT_MAX = 100;
+const GULFS_MAX_COUNT_MIN = 20;
+const GULFS_MAX_COUNT_MAX = 200;
 
 export class WorldGenScene extends Scene {
     canvasTexture!: Phaser.Textures.CanvasTexture;
