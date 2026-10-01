@@ -203,3 +203,13 @@ PERCENT_MAX не нужен, все знают, что 100% - максималь
 islandTypeGenerator должен быть не членом класса, а только внутри generateIslands(). давай, кстати, generateIslands() асинхронно вызывать
 
 ну какой await, асинхронно ж
+
+давай попробуем вариант с setTimeout(..., 0) и анонимной функцией, которая в конце вызывает себя. так мы гарантированно разблокируем поток - переместим генерацию следующего острова в макротаск
+
+### Generation stuck
+
+island generation stuck and `'requestAnimationFrame' handler took <N>ms`.
+
+Please add debug print with `__TEST__ 100/200/300` prefix in cycles
+
+100/200 - надо увеличивать для каждого сообщения, а если вклинивается новое, то 150, 175...

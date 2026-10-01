@@ -10,7 +10,7 @@ import { IslandTypeGenerator } from '@/worldGenerator/island-type-generator';
 import { logPrefixFilename } from '@/helpers/vite';
 
 export const WORLD_MAP_TEXTURE_KEY = 'worldMapTexture';
-const REDRAW_INTERVAL_MS = 333;
+// const REDRAW_INTERVAL_MS = 333;
 const WORLD_MAP_ZOOM = 1;
 const DRAW_MAP_POSITION_X = 60;
 const DRAW_MAP_POSITION_Y = 30;
@@ -23,7 +23,7 @@ export class WorldGenScene extends Scene {
     canvasTexture!: Phaser.Textures.CanvasTexture;
     worldMap!: WorldMap;
     worldMapDrawer!: WorldMapDrawer;
-    redrawPlanned = false;
+    redrawWorldMapRequired = false;
 
     constructor() {
         super(SCENE_WORLD_MAP_GEN);
@@ -60,13 +60,13 @@ export class WorldGenScene extends Scene {
 
         this.redraw();
 
-        this.time.addEvent({
-            delay: REDRAW_INTERVAL_MS,
-            callback: () => {
-                this.redrawPlanned = true;
-            },
-            loop: true,
-        });
+        // this.time.addEvent({
+        //     delay: REDRAW_INTERVAL_MS,
+        //     callback: () => {
+        //         this.redrawPlanned = true;
+        //     },
+        //     loop: true,
+        // });
     }
 
     generateIslands(worldGenerator: WorldGenerator) {
@@ -77,7 +77,14 @@ export class WorldGenScene extends Scene {
         let islandsGenerated = 0;
 
         const generateNextIsland = () => {
-            if (islandTypeGenerator.isRequiredCountsSatisfied()) {
+            console.log(
+                `__TEST__ 100: generateIslands: next island, islandsGenerated: ${islandsGenerated}, islandTypeToCount: ${JSON.stringify(islandTypeGenerator.islandTypeToCount)}`
+            );
+
+            if (islandsGenerated >= ISLANDS_COUNT_MIN && islandTypeGenerator.isRequiredCountsSatisfied()) {
+                console.log(
+                    `__TEST__ 190: generateIslands: required counts satisfied, done`
+                );
                 return;
             }
 
@@ -109,7 +116,7 @@ export class WorldGenScene extends Scene {
 
             islandsGenerated++;
 
-            this.redrawPlanned = true;
+            this.redrawWorldMapRequired = true;
 
             // Перенос следующего острова в макротаск разблокирует поток
             setTimeout(generateNextIsland, 0);
@@ -119,14 +126,16 @@ export class WorldGenScene extends Scene {
     }
 
     update() {
-        if (this.redrawPlanned) {
-            this.redrawPlanned = false;
+        if (this.redrawWorldMapRequired) {
+            // console.log('__TEST__ 800 redraw planned');
+            this.redrawWorldMapRequired = false;
 
             this.redraw();
         }
     }
 
     redraw() {
+        // console.log('__TEST__ 800 redraw called');
         this.worldMapDrawer.draw();
     }
 }

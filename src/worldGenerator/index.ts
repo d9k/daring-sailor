@@ -35,15 +35,25 @@ export class WorldGenerator {
         iterations,
         fillWithCellType,
     }: WorldMapFloodFillArgs) {
+        // console.log(
+        //     `__TEST__ 200: floodFillFromCell: entry cell ${cellCoords.toKey()}, fillWithCellType: ${fillWithCellType}`
+        // );
+
         islandCells.setValue(cellCoords);
         borderCells.setValue(cellCoords);
 
         for (let i = 0; i < iterations; i++) {
+            // console.log(
+            //     `__TEST__ 300: floodFillFromCell: iteration ${i}/${iterations}, islandCells: ${Object.keys(islandCells.data).length}, borderCells: ${Object.keys(borderCells.data).length}`
+            // );
             const currentGenerationCell = this.randomBorderCell(
                 islandCells,
                 borderCells
             );
             if (!currentGenerationCell) {
+                // console.log(
+                //     `__TEST__ 350: floodFillFromCell: randomBorderCell returned undefined, break on iteration ${i}`
+                // );
                 break;
             }
 
@@ -57,9 +67,16 @@ export class WorldGenerator {
 
             const generateSteps = this.calcGenerateStepsCount(startDirections);
 
+            // console.log(
+            //     `__TEST__ 400: floodFillFromCell: startDirections: ${JSON.stringify(startDirections)}, generateSteps: ${generateSteps}`
+            // );
+
             for (let s = 0; s < generateSteps; s++) {
                 const directions = this.getRandomIntToDirection(islandCells, cell);
                 if (Object.keys(directions).length === 0) {
+                    // console.log(
+                    //     `__TEST__ 450: floodFillFromCell: no directions on step ${s}, break`
+                    // );
                     break;
                 }
 
@@ -90,6 +107,10 @@ export class WorldGenerator {
 
             borderCells.removeValue(currentGenerationCell);
         }
+
+        // console.log(
+        //     `__TEST__ 500: floodFillFromCell: done, islandCells: ${Object.keys(islandCells.data).length}`
+        // );
     }
 
     getRandomIntToDirection(
@@ -144,11 +165,17 @@ export class WorldGenerator {
         for (let attempt = 0; attempt < RANDOM_BORDER_CELL_MAX_ATTEMPTS_COUNT; attempt++) {
             const keys = Object.keys(borderCells.data);
             if (keys.length === 0) {
+                // console.log(
+                //     `__TEST__ 310: randomBorderCell: borderCells empty, attempt ${attempt}`
+                // );
                 return undefined;
             }
 
             const key = keys[Math.floor(Math.random() * keys.length)];
             const cell = IntXY.fromKey(key);
+            // console.log(
+            //     `__TEST__ 320: randomBorderCell: attempt ${attempt}, cell ${key}, borderCells size ${keys.length}`
+            // );
 
             if (!borderCells.getValue(cell)) {
                 borderCells.removeValue(cell);
@@ -169,6 +196,9 @@ export class WorldGenerator {
             // borderCells.removeValue(cell);
         }
 
+        // console.log(
+        //     `__TEST__ 330: randomBorderCell exceeded ${RANDOM_BORDER_CELL_MAX_ATTEMPTS_COUNT} attempts, islandCells: ${Object.keys(islandCells.data).length}, borderCells: ${Object.keys(borderCells.data).length}`
+        // );
         console.error(
             `${logPrefixFilename(import.meta.url)}: randomBorderCell exceeded ${RANDOM_BORDER_CELL_MAX_ATTEMPTS_COUNT} attempts`
         );
